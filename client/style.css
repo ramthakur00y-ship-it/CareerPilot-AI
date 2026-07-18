@@ -77,28 +77,66 @@ nav{
 
 }
 
+
 nav a{
 
     text-decoration: none;
 
-    color: blue;
+    color: #1f2937;
 
-    font-weight: bold;
+    font-size: 18px;
 
-    margin: 0 10px;
+    font-weight: 600;
+
+    padding: 10px 18px;
+
+    border-radius: 8px;
+
     transition: all 0.3s ease;
 
 }
-
 nav a:hover{
 
-    color: #356d0d;
-       letter-spacing: 1px;
+    background-color: #2563eb;
+
+    color: white;
+
+    transform: translateY(-3px);
 
 }
 #hero{
 
+    text-align: center;
+
+    background: rgba(255,255,255,0.25);
+
+    padding: 50px 30px;
+
+    border-radius: 20px;
+
+    margin: 30px 0;
+
+    backdrop-filter: blur(8px);
+
     animation: fadeIn 1s ease;
+
+}
+#hero h2{
+
+    font-size: 38px;
+
+    color: #1e3a8a;
+
+    margin-bottom: 20px;
+
+}
+#hero p{
+
+    font-size: 20px;
+
+    color: #333;
+
+    line-height: 1.8;
 
 }
 @keyframes fadeIn{
@@ -156,6 +194,62 @@ footer{
     color: #222;
 
     font-size: 18px;
+
+}
+.container{
+
+    max-width: 1200px;
+
+    margin: auto;
+
+    padding: 20px;
+
+}
+nav{
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 30px;
+
+    background-color: rgba(255,255,255,0.35);
+
+    padding: 15px;
+
+    border-radius: 12px;
+
+    margin: 25px 0;
+
+    backdrop-filter: blur(8px);
+
+}
+button{
+
+    background: #2563eb;
+
+    color: white;
+
+    border: none;
+
+    padding: 12px 30px;
+
+    font-size: 18px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+
+}
+button:hover{
+
+    background: #1d4ed8;
+
+    transform: scale(1.05);
 
 }
 
