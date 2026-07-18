@@ -1,18 +1,47 @@
 body{
-  background-color: lightgreen;
+  background-color: #cd6ec5;
   /* font-family: Arial, Helvetica, sans-serif; */
   font-family: "Times New Roman", serif;
   margin: 0px;
     padding: 20px;
+      background: linear-gradient(
+        135deg,  
+        #6eb7cd 0%,
+        #b458c2 25%,
+        #c16ee7 55%,
+        #b7dcf7 80%,
+        #fbf0ff 100%
+    );
 }
+
 h1{
+    text-align: center;
+    font-size: 50px;
+    font-weight: 700;
 
-    color: red;
-    /* color: purple; */
-        text-align: center;
+    background: linear-gradient(
+        90deg,
+        #2b0515,
+        #271671,
+        #410bc0
+    );
 
-
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
+
+.career{
+    color: #2563eb;
+}
+
+.pilot{
+    color: #22c55e;
+}
+
+.ai{
+    color: #f97316;
+}
+
 .card{
 
     background-color: white;
@@ -24,8 +53,22 @@ h1{
     border: 1px solid #dcdcdc;
 
     border-radius: 10px;
+    transition: all 0.4s ease;
 
 }
+
+.card:hover{
+
+    transform: translateY(-10px) scale(1.02);
+
+    box-shadow: 0 15px 35px rgba(37, 99, 235, 0.2);
+
+    border-color: #2563eb;
+
+}
+
+
+
 nav{
 
     text-align: center;
@@ -38,7 +81,7 @@ nav a{
 
     text-decoration: none;
 
-    color: #2563eb;
+    color: blue;
 
     font-weight: bold;
 
@@ -46,15 +89,45 @@ nav a{
     transition: all 0.3s ease;
 
 }
+
 nav a:hover{
 
-    color: ;
-
+    color: #356d0d;
+       letter-spacing: 1px;
 
 }
-nav a:hover{
+#hero{
 
-    color: #af881e;
+    animation: fadeIn 1s ease;
+
+}
+@keyframes fadeIn{
+
+    from{
+
+        opacity:0;
+
+        transform: translateY(40px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform: translateY(0);
+
+    }
+
+}
+
+.card h3{
+
+    color: #1251d8;
+
+    margin-top: 0;
+
+    margin-bottom: 10px;
 
 }
 
