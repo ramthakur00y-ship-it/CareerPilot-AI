@@ -45,5 +45,10 @@ nav a{
     margin: 0 10px;
 
 }
+nav a:hover{
+
+    color: #af881e;
+
+}
 
 
