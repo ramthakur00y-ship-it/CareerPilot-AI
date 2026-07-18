@@ -541,3 +541,20 @@ textarea:focus{
     }
 
 }
+#resultCard{
+
+    display:none;
+
+    background:white;
+
+    padding:25px;
+
+    margin-top:30px;
+
+    border-radius:15px;
+
+    box-shadow:0 10px 20px rgba(0,0,0,0.2);
+
+    text-align:center;
+
+}

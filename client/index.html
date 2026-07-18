@@ -13,7 +13,7 @@
 </head>
 
 <body>
-    <div class="container"></div>
+    <div class="container">
    
 <img src="images/ai- logo.png" alt="CareerPilot AI Logo" width="120">
 <h1>CareerPilot - AI</h1>
@@ -63,11 +63,11 @@
 
         <a href="#">
 
-    <button>
+    <button id="startBtn">
 
-        Get Started
+Get Started
 
-    </button>
+</button>
 
         </a>
 
@@ -81,13 +81,17 @@
 
     <div class="features-container">
 
-        <h3>Resume Upload</h3>
+<div class="card">
 
-        <p>
-            Upload your resume for AI analysis.
-        </p>
+<h3>Resume Upload</h3>
 
-    </div >
+<p>
+
+Upload your resume for AI analysis.
+
+</p>
+
+</div>
 
     <div class="card">
 
@@ -377,9 +381,17 @@
 </tr>
 
 </table>
-<h2>Resume Upload</h2>
+<h2 id="resume-form">
 
-<form>
+Resume Upload
+
+</h2>
+
+<!-- =====================================
+     Step 47 - Resume Form
+====================================== -->
+
+<form id="resumeForm">
 <!-- <label>Full Name</label> -->
 <label for="fullname">
 
@@ -667,7 +679,11 @@
 <br>
 
 
-<button type="submit">
+<!-- =====================================
+     Step 47 - Analyze Button
+====================================== -->
+
+<button type="submit" id="analyzeBtn">
 
     Analyze Resume
 
@@ -677,7 +693,22 @@
     Clear Form
 
 </button>
+
 </form>
+<div id="resultCard">
+
+    <h2>Resume Analysis Result</h2>
+
+    <p id="resultText">
+
+        Waiting For Resume Analysis...
+
+    </p>
+
+</div>
+
+
+
 <hr>
 
 <footer>
