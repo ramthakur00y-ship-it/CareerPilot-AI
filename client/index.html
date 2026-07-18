@@ -118,15 +118,15 @@
 
     </div>
 
-    <div class="card">
+<div class="card">
 
-        <h3>AI Mock Interview</h3>
+    <h3>AI Cover Letter Generator</h3>
 
-        <p>
-            Practice interviews with AI.
-        </p>
+    <p>
+        Generate personalized cover letters for every job.
+    </p>
 
-    </div>
+</div>
 
 </section>
 <h3>Our AI Features</h3>
@@ -141,7 +141,7 @@
 
     <li>Career Guidance</li>
 
-    <li>Mock Interview</li>
+    <li>AI Cover Letter Generator</li>
 
 </ul>
 <h3>How CareerPilot AI Works</h3>
@@ -156,7 +156,7 @@
 
     <li>Receive Job Recommendations</li>
 
-    <li>Start Mock Interview</li>
+    <li>Generate AI Cover Letter</li>
 
 </ol>
 <h3>Top Job Openings</h3>
@@ -222,6 +222,10 @@
     id="fullname"
     name="fullname"
     placeholder="Enter Your Full Name"
+    required
+    minlength="3"
+    maxlength="50"
+    autocomplete="name"
 >
 
 <br>
@@ -240,6 +244,8 @@
     id="email"
     name="email"
     placeholder="Enter Your Email"
+    required
+    autocomplete="email"
 >
 
 <br>
@@ -249,6 +255,22 @@
     Password
 
 </label>
+
+<br>
+
+ <input
+    type="password"
+    id="password"
+    name="password"
+    placeholder="Enter Your Password"
+    required
+    minlength="8"
+    maxlength="20"
+>  
+<br>
+
+
+
 <label for="experience">
 
     Experience Level
@@ -257,7 +279,11 @@
 
 <br>
 
-<select id="experience" name="experience">
+<select
+    id="experience"
+    name="experience"
+    required
+>
 
     <option>Fresher</option>
 
@@ -270,22 +296,207 @@
 </select>
 
 <br>
-<br>
+
+<label for="resume"> 
+    
+
+
+    Upload Resume (PDF/DOC/DOCX)
+
+
+</label>
 
 <br>
 
 <input
-    type="password"
-    id="password"
-    name="password"
-    placeholder="Enter Your Password"
+    type="file"
+    id="resume"
+    name="resume"
+    accept=".pdf,.doc,.docx"
+    required
 >
 
 <br>
 <br>
+<label>
+
+    Preferred Job Type
+
+</label>
+
+<br>
+
+<input
+    type="radio"
+    id="fulltime"
+    name="jobtype"
+    value="Full Time"
+>
+
+<label for="fulltime">
+
+    Full Time
+
+</label>
+
+<br>
+
+<input
+    type="radio"
+    id="internship"
+    name="jobtype"
+    value="Internship"
+>
+
+<label for="internship">
+
+    Internship
+
+</label>
+
+<br>
+
+<input
+    type="radio"
+    id="remote"
+    name="jobtype"
+    value="Remote"
+>
+
+<label for="remote">
+
+    Remote
+
+</label>
+
+<br>
+<br>
+<label>
+
+    Skills
+
+</label>
+
+<br>
+
+<input type="checkbox" id="c" name="skills" value="C">
+<label for="c">C</label>
+
+<br>
+
+<input type="checkbox" id="cpp" name="skills" value="C++">
+<label for="cpp">C++</label>
+
+<br>
+
+<input type="checkbox" id="java" name="skills" value="Java">
+<label for="java">Java</label>
+
+<br>
+
+<input type="checkbox" id="python" name="skills" value="Python">
+<label for="python">Python</label>
+
+<br>
+
+<input type="checkbox" id="html" name="skills" value="HTML">
+<label for="html">HTML</label>
+
+<br>
+
+<input type="checkbox" id="css" name="skills" value="CSS">
+<label for="css">CSS</label>
+
+<br>
+
+<input type="checkbox" id="javascript" name="skills" value="JavaScript">
+<label for="javascript">JavaScript</label>
+
+<br>
+
+<input type="checkbox" id="react" name="skills" value="React">
+<label for="react">React</label>
+
+<br>
+
+<input type="checkbox" id="node" name="skills" value="Node.js">
+<label for="node">Node.js</label>
+
+<br>
+
+<input type="checkbox" id="express" name="skills" value="Express.js">
+<label for="express">Express.js</label>
+
+<br>
+
+<input type="checkbox" id="mongodb" name="skills" value="MongoDB">
+<label for="mongodb">MongoDB</label>
+
+<br>
+
+<input type="checkbox" id="mysql" name="skills" value="MySQL">
+<label for="mysql">MySQL</label>
+
+<br>
+
+<input type="checkbox" id="springboot" name="skills" value="Spring Boot">
+<label for="springboot">Spring Boot</label>
+
+<br>
+
+<input type="checkbox" id="git" name="skills" value="Git">
+<label for="git">Git</label>
+
+<br>
+
+<input type="checkbox" id="github" name="skills" value="GitHub">
+<label for="github">GitHub</label>
+
+<br>
+
+<input type="checkbox" id="aws" name="skills" value="AWS">
+<label for="aws">AWS</label>
+
+<br>
+
+<input type="checkbox" id="docker" name="skills" value="Docker">
+<label for="docker">Docker</label>
+
+<br>
+
+<input type="checkbox" id="ai" name="skills" value="Artificial Intelligence">
+<label for="ai">Artificial Intelligence</label>
+
+<br>
+
+<input type="checkbox" id="ml" name="skills" value="Machine Learning">
+<label for="ml">Machine Learning</label>
+
+<br><br>
+<label for="careergoal">
+
+    Career Goal
+
+</label>
+
+<br>
+
+<textarea
+    id="careergoal"
+    name="careergoal"
+    rows="5"
+    cols="50"
+    placeholder="Write your career goal here..."
+    required
+></textarea>
+
+<br>
+<br>
+
+
 <button type="submit">
 
-    Upload Resume
+    Analyze Resume
 
 </button>
 <button type="reset">
@@ -294,6 +505,23 @@
 
 </button>
 </form>
+<hr>
+
+<footer>
+
+    <p>
+
+        &copy; 2026 CareerPilot AI. All Rights Reserved.
+
+    </p>
+
+    <p>
+
+        Developed by Team CareerPilot AI
+
+    </p>
+
+</footer>
 
 
 
