@@ -90,6 +90,9 @@ const atsScore = Math.floor(Math.random() * 21) + 80;
 const resultCard = document.getElementById("resultCard");
 
 const resultText = document.getElementById("resultText");
+const progressContainer = document.getElementById("progressContainer");
+
+const progressBar = document.getElementById("progressBar");
 
 // Card Show
 resultCard.style.display = "block";
@@ -99,9 +102,29 @@ resultText.innerHTML = `
 <h2>⏳ Analyzing Resume...</h2>
 <p>Please Wait...</p>
 `;
+progressContainer.style.display = "block";
+
+progressBar.style.width = "0%";
+
+let progress = 0;
+
+const loading = setInterval(function(){
+
+    progress += 5;
+
+    progressBar.style.width = progress + "%";
+
+    if(progress >= 100){
+
+        clearInterval(loading);
+
+    }
+
+},100);
 
 // 2 Second Delay
 setTimeout(function () {
+    progressContainer.style.display = "none";
 
     let color = "";
 
@@ -140,25 +163,38 @@ setTimeout(function () {
        Step 50 - ATS Score Color
     ========================================== */
 
-    let color = "";
 
-    if (atsScore >= 90) {
-
-        color = "green";
-
-    }
-    else if (atsScore >= 80) {
-
-        color = "orange";
-
-    }
-    else {
-
-        color = "red";
-
-    }
 
 
   
+
+});
+/* ==========================================
+   Step 52 - Show Uploaded Resume File Name
+========================================== */
+
+// Resume Input Select
+const resumeInput = document.getElementById("resume");
+
+// Paragraph Select
+const fileName = document.getElementById("fileName");
+
+// File Select Event
+resumeInput.addEventListener("change", function () {
+
+    // Check File Selected
+    if (resumeInput.files.length > 0) {
+
+        // Show File Name
+        fileName.innerHTML = "📄 " + resumeInput.files[0].name;
+
+    }
+
+    else{
+
+        // Default Message
+        fileName.innerHTML = "No Resume Selected";
+
+    }
 
 });

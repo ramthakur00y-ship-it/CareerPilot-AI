@@ -558,3 +558,58 @@ textarea:focus{
     text-align:center;
 
 }
+/* ==========================================
+   Step 52 - Uploaded File Name
+========================================== */
+
+#fileName{
+
+    margin-top:10px;
+    /* File Input से Gap देगा */
+
+    margin-bottom:20px;
+    /* नीचे Space देगा */
+
+    color:#2563eb;
+    /* Blue Color */
+
+    font-size:18px;
+    /* Text Size */
+
+    font-weight:bold;
+    /* Bold Text */
+
+}
+/* ==========================================
+   Step 53 - Progress Bar
+========================================== */
+
+#progressContainer{
+
+    width:100%;
+
+    height:20px;
+
+    background:#dcdcdc;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    margin-top:20px;
+
+    display:none;
+
+}
+
+#progressBar{
+
+    width:0%;
+
+    height:100%;
+
+    background:linear-gradient(to right,#00c853,#4caf50);
+
+    transition:width 0.2s;
+
+}
