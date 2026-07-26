@@ -90,6 +90,8 @@ const atsScore = Math.floor(Math.random() * 21) + 80;
 const resultCard = document.getElementById("resultCard");
 
 const resultText = document.getElementById("resultText");
+const resumeStrength = document.getElementById("resumeStrength");
+const suggestionList = document.getElementById("suggestionList");
 const progressContainer = document.getElementById("progressContainer");
 
 const progressBar = document.getElementById("progressBar");
@@ -153,6 +155,65 @@ setTimeout(function () {
         🎯 ATS Score : ${atsScore}%
         </h2>
     `;
+    // Resume Strength
+
+if (atsScore >= 90) {
+
+    resumeStrength.innerHTML = "🟢 Excellent Resume";
+
+    resumeStrength.style.color = "green";
+
+}
+
+else if (atsScore >= 80) {
+
+    resumeStrength.innerHTML = "🟡 Good Resume";
+
+    resumeStrength.style.color = "orange";
+
+}
+
+else {
+
+    resumeStrength.innerHTML = "🔴 Needs Improvement";
+
+    resumeStrength.style.color = "red";
+
+}
+/* ==========================================
+   Step 55 - AI Suggestions
+========================================== */
+
+if (atsScore >= 90) {
+
+    suggestionList.innerHTML = `
+        <li>✅ Great Resume</li>
+        <li>✅ Ready for Most Companies</li>
+        <li>✅ Keep Updating Your Projects</li>
+    `;
+
+}
+
+else if (atsScore >= 80) {
+
+    suggestionList.innerHTML = `
+        <li>📌 Add More Projects</li>
+        <li>📌 Improve Resume Formatting</li>
+        <li>📌 Add Certifications</li>
+    `;
+
+}
+
+else {
+
+    suggestionList.innerHTML = `
+        <li>❌ Add More Skills</li>
+        <li>❌ Improve Resume Summary</li>
+        <li>❌ Add Strong Projects</li>
+        <li>❌ Use Action Verbs</li>
+    `;
+
+}
 
 }, 2000);
     
