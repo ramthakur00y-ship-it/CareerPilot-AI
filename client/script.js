@@ -95,6 +95,8 @@ const suggestionList = document.getElementById("suggestionList");
 const progressContainer = document.getElementById("progressContainer");
 
 const progressBar = document.getElementById("progressBar");
+const circle = document.getElementById("circle");
+const score = document.getElementById("score");
 
 // Card Show
 resultCard.style.display = "block";
@@ -155,6 +157,48 @@ setTimeout(function () {
         🎯 ATS Score : ${atsScore}%
         </h2>
     `;
+    /* ==========================================
+ ==========================================
+ Step 56.3 - Circular ATS Meter
+==========================================*/
+
+const radius = 70;
+
+const circumference = 2 * Math.PI * radius;
+
+circle.style.strokeDasharray = circumference;
+
+const offset = circumference - (atsScore / 100) * circumference;
+
+circle.style.strokeDashoffset = offset;
+
+// ==========================================
+// Step 56.5 - Animated Score Counter
+// ==========================================
+
+let currentScore = 0;
+
+const counter = setInterval(function () {
+
+    currentScore++;
+
+    score.innerHTML = currentScore + "%";
+
+    if (currentScore >= atsScore) {
+
+        clearInterval(counter);
+
+    }
+
+}, 20);
+// Circle Color
+
+circle.style.stroke = color;
+
+// Percentage Color
+
+score.style.color = color;
+
     // Resume Strength
 
 if (atsScore >= 90) {

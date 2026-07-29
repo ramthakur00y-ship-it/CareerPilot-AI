@@ -651,3 +651,78 @@ textarea:focus{
     margin-bottom:10px;
 
 }
+/* ==========================================
+   Step 56.2 - Circular ATS Meter CSS
+========================================== */
+
+.circle-container{
+
+    display:flex;
+
+    justify-content:center;
+
+    margin:25px 0;
+
+}
+
+.meter{
+
+    position:relative;
+
+    width:160px;
+
+    height:160px;
+
+}
+
+.meter svg{
+
+    transform:rotate(-90deg);
+
+}
+
+.meter circle{
+
+    fill:none;
+
+    stroke-width:12;
+
+    stroke-linecap:round;
+
+}
+
+.meter .bg{
+
+    stroke:#e6e6e6;
+
+}
+
+#circle{
+
+    stroke:#2563eb;
+
+    stroke-dasharray:440;
+
+    stroke-dashoffset:440;
+
+    transition:stroke-dashoffset 2s ease;
+
+}
+
+#score{
+
+    position:absolute;
+
+    top:50%;
+
+    left:50%;
+
+    transform:translate(-50%,-50%);
+
+    font-size:28px;
+
+    font-weight:bold;
+
+    color:#2563eb;
+
+}
