@@ -726,3 +726,66 @@ textarea:focus{
     color:#2563eb;
 
 }
+/* ==========================================
+   Step 56.6 - Glow Animation
+========================================== */
+
+@keyframes glowEffect{
+
+    0%{
+
+        filter: drop-shadow(0 0 0px #2563eb);
+
+    }
+
+    50%{
+
+        filter: drop-shadow(0 0 12px #2563eb);
+
+    }
+
+    100%{
+
+        filter: drop-shadow(0 0 0px #2563eb);
+
+    }
+
+}
+
+.glow{
+
+    animation: glowEffect 1.5s ease;
+}
+/* ==========================================
+   Step 57.2 - Resume Preview CSS
+========================================== */
+
+#previewContainer{
+
+    display:none;
+
+    margin-top:25px;
+
+}
+
+#previewContainer h3{
+
+    color:#2563eb;
+
+    margin-bottom:15px;
+
+}
+
+#previewBox{
+
+    width:100%;
+
+    height:500px;
+
+    border:2px solid #2563eb;
+
+    border-radius:12px;
+
+    background:white;
+
+}

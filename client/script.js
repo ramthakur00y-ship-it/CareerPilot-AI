@@ -171,6 +171,15 @@ circle.style.strokeDasharray = circumference;
 const offset = circumference - (atsScore / 100) * circumference;
 
 circle.style.strokeDashoffset = offset;
+// Glow Animation
+
+circle.classList.remove("glow");
+
+setTimeout(function () {
+
+    circle.classList.add("glow");
+
+}, 100);
 
 // ==========================================
 // Step 56.5 - Animated Score Counter
@@ -299,6 +308,37 @@ resumeInput.addEventListener("change", function () {
 
         // Default Message
         fileName.innerHTML = "No Resume Selected";
+
+    }
+
+});
+/* ==========================================
+   Step 57.3 - Resume Preview
+========================================== */
+
+const previewContainer = document.getElementById("previewContainer");
+
+const previewBox = document.getElementById("previewBox");
+
+resumeInput.addEventListener("change", function () {
+
+    if (resumeInput.files.length > 0) {
+
+        const file = resumeInput.files[0];
+
+        const fileURL = URL.createObjectURL(file);
+
+        previewContainer.style.display = "block";
+
+        previewBox.src = fileURL;
+
+    }
+
+    else{
+
+        previewContainer.style.display = "none";
+
+        previewBox.src = "";
 
     }
 
