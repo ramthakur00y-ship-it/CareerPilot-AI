@@ -343,3 +343,45 @@ resumeInput.addEventListener("change", function () {
     }
 
 });
+/* ==========================================
+   Step 58.2 - Preview Controls
+========================================== */
+
+const zoomIn = document.getElementById("zoomIn");
+
+const zoomOut = document.getElementById("zoomOut");
+
+const closePreview = document.getElementById("closePreview");
+
+let zoomLevel = 100;
+
+// Zoom In
+zoomIn.addEventListener("click", function () {
+
+    zoomLevel += 10;
+
+    previewBox.style.height = zoomLevel + "%";
+
+});
+
+// Zoom Out
+zoomOut.addEventListener("click", function () {
+
+    if (zoomLevel > 50) {
+
+        zoomLevel -= 10;
+
+        previewBox.style.height = zoomLevel + "%";
+
+    }
+
+});
+
+// Close Preview
+closePreview.addEventListener("click", function () {
+
+    previewContainer.style.display = "none";
+
+    previewBox.src = "";
+
+});

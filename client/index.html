@@ -516,13 +516,35 @@ Resume Upload
 
 <div id="previewContainer">
 
-    <h3>Resume Preview</h3>
+    <div class="preview-header">
 
-    <iframe
-        id="previewBox"
-        width="100%"
-        height="500">
-    </iframe>
+        <h3>📄 Resume Preview</h3>
+
+        <div class="preview-buttons">
+
+            <button
+                type="button"
+                id="zoomIn">
+                🔍 +
+            </button>
+
+            <button
+                type="button"
+                id="zoomOut">
+                🔎 -
+            </button>
+
+            <button
+                type="button"
+                id="closePreview">
+                ❌
+            </button>
+
+        </div>
+
+    </div>
+
+    <iframe id="previewBox"></iframe>
 
 </div>
 <br>
