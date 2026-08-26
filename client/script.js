@@ -385,3 +385,9 @@ closePreview.addEventListener("click", function () {
     previewBox.src = "";
 
 });
+
+/* ==========================================
+   Step 59.2 - PDF.js Setup
+========================================== */
+
+const pdfjsLib = window.pdfjsLib;

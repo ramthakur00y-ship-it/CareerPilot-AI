@@ -10,6 +10,14 @@
 
 <link rel="stylesheet" href="style.css">
 
+<!-- ==========================================
+     Step 59.1 - PDF.js Library
+========================================== -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs"
+        type="module">
+</script>
+
 </head>
 
 <body>
@@ -813,6 +821,12 @@ Resume Upload
 </footer>
 
 </div>
+<script type="module">
+    import * as pdfjsLib from
+    "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs";
+
+    window.pdfjsLib = pdfjsLib;
+</script>
 <script src="script.js"></script>
 
 
