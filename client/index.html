@@ -1,840 +1,1411 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta charset="UTF-8">
+    <meta name="theme-color" content="#2563eb">
+    <meta
+        name="description"
+        content="CareerPilot AI - AI powered resume and job specific ATS analyzer"
+    >
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerPilot AI - Resume & ATS Analyzer</title>
 
-<title>CareerPilot AI</title>
-
-<link rel="stylesheet" href="style.css">
-
-<!-- ==========================================
-     Step 59.1 - PDF.js Library
-========================================== -->
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs"
-        type="module">
-</script>
-
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <div class="container">
-   
-<img src="images/ai- logo.png" alt="CareerPilot AI Logo" width="120">
-<h1>CareerPilot - AI</h1>
-<!-- <h1>
-    <span class="career">Career</span><span class="pilot">Pilot</span>
-    <span class="ai">AI</span>
-</h1> -->
 
-    
+<header class="site-header">
+    <nav class="navbar">
 
-    <hr>
-    <nav>
-
-    <a href="#">Home</a> |
-
-    <a href ="#">About</a> |
-
-    <a href="#">Features</a> |
-
-    <a href="#">Contact</a>
-
-</nav>
-
-<hr>
-
-    <section id="hero">
-
-    <h2>AI Resume Analyzer & Career Assistant</h2>
-
-    <p>
-
-        Welcome to
-        <strong>CareerPilot AI</strong>
-
-        <br>
-
-        AI Powered Career Assistant
-
-    </p>
-
-    <p>
-
-        <!-- This is
-        <em>Mini Project</em> -->
-
-    </p>
-
-        <a href="#">
-
-    <button id="startBtn">
-
-Get Started
-
-</button>
-
+        <a href="#home" class="brand" aria-label="CareerPilot AI Home">
+            <span class="brand-career">Career</span><span class="brand-pilot">Pilot</span>
+            <span class="brand-ai">AI</span>
         </a>
 
-</section>
-
-    <hr>
-
-      <section id="features">
-
-    <h2>Features</h2>
-
-    <div class="features-container">
-
-<div class="card">
-
-<h3>Resume Upload</h3>
-
-<p>
-
-Upload your resume for AI analysis.
-
-</p>
-
-</div>
-
-    <div class="card">
-
-        <h3>ATS Score Checker</h3>
-
-        <p>
-            Check your resume ATS score.
-        </p>
-
-    </div>
-
-    <div class="card">
-
-        <h3>Resume Analysis</h3>
-
-        <p>
-            Analyze your resume using AI.
-        </p>
-
-    </div>
-
-    <div class="card">
-
-        <h3>Job Recommendation</h3>
-
-        <p>
-            Get jobs based on your skills.
-        </p>
-
-    </div>
-
-<div class="card">
-
-    <h3>AI Cover Letter Generator</h3>
-
-    <p>
-        Generate personalized cover letters for every job.
-    </p>
-
-</div>
-</div>
-
-
-</section>
-<h3>Our AI Features</h3>
-
-<ul>
-
-    <li>AI Resume Analysis</li>
-
-    <li>ATS Score Checker</li>
-
-    <li>Job Recommendation</li>
-
-    <li>Career Guidance</li>
-
-    <li>AI Cover Letter Generator</li>
-
-</ul>
-<h3>How CareerPilot AI Works</h3>
-
-<ol>
-
-    <li>Upload Resume</li>
-
-    <li>AI Analyzes Resume</li>
-
-    <li>Get ATS Score</li>
-
-    <li>Receive Job Recommendations</li>
-
-    <li>Generate AI Cover Letter</li>
-
-</ol>
-<h3>Top Job Openings</h3>
-
-<table border="1">
-
-    <tr>
-
-        <th>Company</th>
-
-        <th>Role</th>
-
-        <th>Location</th>
-
-    </tr>
-
-    <tr>
-
-    <td>Google</td>
-
-    <td>Software Engineer</td>
-
-    <td>Bangalore</td>
-
-</tr>
-
-<tr>
-
-    <td>Microsoft</td>
-
-    <td>Software Engineer</td>
-
-    <td>Hyderabad</td>
-
-</tr>
-
-<tr>
-
-    <td>Amazon</td>
-
-    <td>SDE Intern</td>
-
-    <td>Bangalore</td>
-
-</tr>
-
-<tr>
-
-    <td>Adobe</td>
-
-    <td>Frontend Developer</td>
-
-    <td>Noida</td>
-
-</tr>
-
-<tr>
-
-    <td>Flipkart</td>
-
-    <td>Backend Developer</td>
-
-    <td>Bangalore</td>
-
-</tr>
-
-<tr>
-
-    <td>Paytm</td>
-
-    <td>Java Developer</td>
-
-    <td>Noida</td>
-
-</tr>
-
-<tr>
-
-    <td>Zoho</td>
-
-    <td>Software Developer</td>
-
-    <td>Chennai</td>
-
-</tr>
-
-<tr>
-
-    <td>Freshworks</td>
-
-    <td>Product Engineer</td>
-
-    <td>Chennai</td>
-
-</tr>
-
-<tr>
-
-    <td>BrowserStack</td>
-
-    <td>Full Stack Developer</td>
-
-    <td>Mumbai</td>
-
-</tr>
-
-<tr>
-
-    <td>Razorpay</td>
-
-    <td>Backend Engineer</td>
-
-    <td>Bangalore</td>
-
-</tr>
-
-<tr>
-
-    <td>Swiggy</td>
-
-    <td>Software Development Engineer</td>
-
-    <td>Bangalore</td>
-
-</tr>
-
-<tr>
-
-    <td>Zomato</td>
-
-    <td>Frontend Engineer</td>
-
-    <td>Gurugram</td>
-
-</tr>
-
-<tr>
-
-    <td>Postman</td>
-
-    <td>Software Engineer</td>
-
-    <td>Bangalore</td>
-
-</tr>
-
-<tr>
-
-    <td>Nagarro</td>
-
-    <td>Java Full Stack Developer</td>
-
-    <td>Gurugram</td>
-
-</tr>
-
-<tr>
-
-    <td>Persistent Systems</td>
-
-    <td>Cloud Engineer</td>
-
-    <td>Pune</td>
-
-</tr>
-
-<tr>
-
-    <td>Mphasis</td>
-
-    <td>Associate Software Engineer</td>
-
-    <td>Bangalore</td>
-
-</tr>
-
-<tr>
-
-    <td>Hexaware</td>
-
-    <td>Software Engineer</td>
-
-    <td>Chennai</td>
-
-</tr>
-
-<tr>
-
-    <td>Coforge</td>
-
-    <td>Full Stack Developer</td>
-
-    <td>Noida</td>
-
-</tr>
-
-<tr>
-
-    <td>SAP Labs</td>
-
-    <td>Software Developer</td>
-
-    <td>Bangalore</td>
-
-</tr>
-
-<tr>
-
-    <td>Intel</td>
-
-    <td>AI Engineer</td>
-
-    <td>Bangalore</td>
-
-</tr>
-
-</table>
-<h2 id="resume-form">
-
-Resume Upload
-
-</h2>
-
-<!-- =====================================
-     Step 47 - Resume Form
-====================================== -->
-
-<form id="resumeForm">
-<!-- <label>Full Name</label> -->
-<label for="fullname">
-
-    Full Name
-
-</label>
-<br>
-
-<!-- <input type="text"> -->
-<!-- <input type="text" placeholder="Enter Your Full Name"> -->
- <input
-    type="text"
-    id="fullname"
-    name="fullname"
-    placeholder="Enter Your Full Name"
-    required
-    minlength="3"
-    maxlength="50"
-    autocomplete="name"
->
-
-<br>
-
-<br>
-<label for="email">
-
-    Email Address
-
-</label>
-
-<br>
-
-<input
-    type="email"
-    id="email"
-    name="email"
-    placeholder="Enter Your Email"
-    required
-    autocomplete="email"
->
-
-<br>
-<br>
-<label for="password">
-
-    Password
-
-</label>
-
-<br>
-
- <input
-    type="password"
-    id="password"
-    name="password"
-    placeholder="Enter Your Password"
-    required
-    minlength="8"
-    maxlength="20"
->  
-<br>
-
-
-
-<label for="experience">
-
-    Experience Level
-
-</label>
-
-<br>
-
-<select
-    id="experience"
-    name="experience"
-    required
->
-
-    <option>Fresher</option>
-
-    <option>0-1 Year</option>
-
-    <option>1-3 Years</option>
-
-    <option>3+ Years</option>
-
-</select>
-
-<br>
-
-<label for="resume"> 
-    
-
-
-    Upload Resume (PDF/DOC/DOCX)
-
-
-</label>
-
-<br>
-
-<input
-    type="file"
-    id="resume"
-    name="resume"
-    accept=".pdf,.doc,.docx"
-    required
->
-<!-- =====================================
-     Step 52 - Uploaded File Name
-====================================== -->
-
-<p id="fileName">
-
-    No Resume Selected
-
-</p>
-
-<!-- =====================================
-     Step 57 - Resume Preview
-===================================== -->
-
-<div id="previewContainer">
-
-    <div class="preview-header">
-
-        <h3>📄 Resume Preview</h3>
-
-        <div class="preview-buttons">
+        <button
+            type="button"
+            class="mobile-menu-btn"
+            id="mobileMenuBtn"
+            aria-label="Open menu"
+            aria-expanded="false"
+        >
+            ☰
+        </button>
+
+        <div class="nav-links" id="navLinks">
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <a href="#features">Features</a>
+            <a href="#how-it-works">How It Works</a>
+            <a href="#resume-section">ATS Analyzer</a>
+            <a href="#jobs">Jobs</a>
+            <a href="#contact">Contact</a>
 
             <button
                 type="button"
-                id="zoomIn">
-                🔍 +
+                class="theme-btn"
+                id="themeToggle"
+                aria-label="Toggle dark mode"
+            >
+                🌙
+            </button>
+        </div>
+
+    </nav>
+</header>
+
+
+<main>
+
+<!-- =========================
+     HERO
+========================= -->
+
+<section class="hero-section" id="home">
+
+    <div class="hero-content">
+
+        <div class="hero-badge">
+            🚀 AI Powered Career Assistant
+        </div>
+
+        <h1>
+            Build a Resume That
+            <span>Gets Noticed</span>
+        </h1>
+
+        <p>
+            Analyze your resume against a specific job description,
+            find missing keywords, improve ATS compatibility and
+            increase your chances of getting shortlisted.
+        </p>
+
+        <div class="hero-buttons">
+
+            <button
+                type="button"
+                class="primary-btn"
+                id="startBtn"
+            >
+                Analyze My Resume →
             </button>
 
-            <button
-                type="button"
-                id="zoomOut">
-                🔎 -
-            </button>
+            <a
+                href="#how-it-works"
+                class="secondary-btn"
+            >
+                How It Works
+            </a>
+
+        </div>
+
+        <div class="hero-stats">
+
+            <div>
+                <strong>ATS</strong>
+                <span>Job Matching</span>
+            </div>
+
+            <div>
+                <strong>AI</strong>
+                <span>Resume Analysis</span>
+            </div>
+
+            <div>
+                <strong>100%</strong>
+                <span>Browser Based</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     ABOUT
+========================= -->
+
+<section class="section" id="about">
+
+    <div class="section-container">
+
+        <div class="section-heading">
+
+            <span>ABOUT CAREERPILOT</span>
+
+            <h2>
+                Your Personal Career Assistant
+            </h2>
+
+            <p>
+                CareerPilot AI helps you understand how well your resume
+                matches a target job before you apply.
+            </p>
+
+        </div>
+
+
+        <div class="about-grid">
+
+            <article class="info-card">
+
+                <div class="icon-box">📄</div>
+
+                <h3>Resume Analysis</h3>
+
+                <p>
+                    Upload your resume and extract its important
+                    content automatically.
+                </p>
+
+            </article>
+
+
+            <article class="info-card">
+
+                <div class="icon-box">🎯</div>
+
+                <h3>Job Matching</h3>
+
+                <p>
+                    Compare your resume with the exact job description
+                    you want to apply for.
+                </p>
+
+            </article>
+
+
+            <article class="info-card">
+
+                <div class="icon-box">📈</div>
+
+                <h3>Actionable Feedback</h3>
+
+                <p>
+                    Find missing keywords, weak sections and
+                    improvement opportunities.
+                </p>
+
+            </article>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     FEATURES
+========================= -->
+
+<section class="section alternate-section" id="features">
+
+    <div class="section-container">
+
+        <div class="section-heading">
+
+            <span>FEATURES</span>
+
+            <h2>
+                Everything You Need
+            </h2>
+
+            <p>
+                Improve your resume with practical ATS-focused analysis.
+            </p>
+
+        </div>
+
+
+        <div class="features-container">
+
+            <article class="feature-card">
+                <div class="feature-icon">🤖</div>
+                <h3>Job Specific ATS Score</h3>
+                <p>
+                    Get a score based on your resume and target job
+                    description.
+                </p>
+            </article>
+
+
+            <article class="feature-card">
+                <div class="feature-icon">🔑</div>
+                <h3>Keyword Matching</h3>
+                <p>
+                    See which important job keywords are present
+                    and which are missing.
+                </p>
+            </article>
+
+
+            <article class="feature-card">
+                <div class="feature-icon">🧠</div>
+                <h3>Skills Alignment</h3>
+                <p>
+                    Compare the skills required by the job with
+                    the skills mentioned in your resume.
+                </p>
+            </article>
+
+
+            <article class="feature-card">
+                <div class="feature-icon">💼</div>
+                <h3>Experience Relevance</h3>
+                <p>
+                    Check whether your experience and role-related
+                    terms match the target position.
+                </p>
+            </article>
+
+
+            <article class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Resume Quality</h3>
+                <p>
+                    Detect weak action verbs, missing numbers,
+                    poor length and missing sections.
+                </p>
+            </article>
+
+
+            <article class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3>Responsive Design</h3>
+                <p>
+                    Analyze your resume comfortably on desktop,
+                    tablet or mobile.
+                </p>
+            </article>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     HOW IT WORKS
+========================= -->
+
+<section class="section" id="how-it-works">
+
+    <div class="section-container">
+
+        <div class="section-heading">
+
+            <span>HOW IT WORKS</span>
+
+            <h2>
+                Five Simple Steps
+            </h2>
+
+        </div>
+
+
+        <div class="steps-container">
+
+            <article class="step-card">
+                <span>1</span>
+                <h3>Enter Details</h3>
+                <p>Enter your basic profile information.</p>
+            </article>
+
+            <article class="step-card">
+                <span>2</span>
+                <h3>Upload Resume</h3>
+                <p>Upload your PDF or DOCX resume.</p>
+            </article>
+
+            <article class="step-card">
+                <span>3</span>
+                <h3>Paste Job</h3>
+                <p>Paste the target job description.</p>
+            </article>
+
+            <article class="step-card">
+                <span>4</span>
+                <h3>Analyze</h3>
+                <p>CareerPilot compares your resume with the job.</p>
+            </article>
+
+            <article class="step-card">
+                <span>5</span>
+                <h3>Improve</h3>
+                <p>Use the feedback to improve your resume.</p>
+            </article>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     RESUME ANALYZER
+========================= -->
+
+<section
+    class="section resume-section"
+    id="resume-section"
+>
+
+    <div class="section-container">
+
+        <div class="section-heading">
+
+            <span>ATS RESUME ANALYZER</span>
+
+            <h2>
+                Test Your Resume Against a Real Job
+            </h2>
+
+            <p>
+                For the most useful ATS analysis, paste the job description
+                along with your resume.
+            </p>
+
+        </div>
+
+
+        <div class="resume-layout">
+
+            <!-- FORM -->
+
+            <div class="resume-card">
+
+                <div class="form-header">
+
+                    <h3>Resume Analysis</h3>
+
+                    <p>
+                        Fill in your details and upload your resume.
+                    </p>
+
+                </div>
+
+
+                <form id="resumeForm">
+
+                    <!-- NAME -->
+
+                    <div class="form-group">
+
+                        <label for="fullname">
+                            Full Name *
+                        </label>
+
+                        <input
+                            type="text"
+                            id="fullname"
+                            name="fullname"
+                            placeholder="Enter your full name"
+                            autocomplete="name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+
+                    <div class="form-group">
+
+                        <label for="email">
+                            Email *
+                        </label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="example@email.com"
+                            autocomplete="email"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- PASSWORD -->
+
+                    <div class="form-group">
+
+                        <label for="password">
+                            Password *
+                        </label>
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Enter a password"
+                            autocomplete="new-password"
+                            minlength="6"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- EXPERIENCE -->
+
+                    <div class="form-group">
+
+                        <label for="experience">
+                            Experience *
+                        </label>
+
+                        <select
+                            id="experience"
+                            name="experience"
+                            required
+                        >
+                            <option value="">Select experience</option>
+                            <option value="fresher">Fresher</option>
+                            <option value="0-1">0 - 1 Year</option>
+                            <option value="1-3">1 - 3 Years</option>
+                            <option value="3-5">3 - 5 Years</option>
+                            <option value="5-8">5 - 8 Years</option>
+                            <option value="8+">8+ Years</option>
+                        </select>
+
+                    </div>
+
+
+                    <!-- RESUME -->
+
+                    <div class="form-group">
+
+                        <label for="resume">
+                            Upload Resume *
+                        </label>
+
+                        <div class="file-upload">
+
+                            <input
+                                type="file"
+                                id="resume"
+                                name="resume"
+                                accept=".pdf,.docx,.doc"
+                                required
+                            >
+
+                            <div class="file-upload-text">
+
+                                <span>📄</span>
+
+                                <strong>
+                                    Click to upload resume
+                                </strong>
+
+                                <small>
+                                    PDF or DOCX recommended
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                        <div id="fileName">
+                            No file selected
+                        </div>
+
+                    </div>
+
+
+                    <!-- CAREER GOAL -->
+
+                    <div class="form-group">
+
+                        <label for="careergoal">
+                            Target Career / Job Role *
+                        </label>
+
+                        <textarea
+                            id="careergoal"
+                            name="careergoal"
+                            rows="3"
+                            minlength="3"
+                            placeholder="Example: Frontend Developer, Software Engineer, Data Analyst"
+                            required
+                        ></textarea>
+
+                    </div>
+
+
+                    <!-- JOB DESCRIPTION -->
+
+                    <div class="form-group">
+
+                        <label for="jobDescription">
+                            Job Description *
+                        </label>
+
+                        <textarea
+                            id="jobDescription"
+                            name="jobDescription"
+                            rows="10"
+                            minlength="30"
+                            placeholder="Paste the complete job description here..."
+                            required
+                        ></textarea>
+
+                        <small>
+                            Paste the exact JD for a job-specific ATS score.
+                        </small>
+
+                    </div>
+
+
+                    <!-- JOB TYPE -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Job Type *
+                        </label>
+
+                        <div class="radio-group">
+
+                            <label class="radio-option">
+                                <input
+                                    type="radio"
+                                    name="jobtype"
+                                    value="Full Time"
+                                    required
+                                >
+                                Full Time
+                            </label>
+
+                            <label class="radio-option">
+                                <input
+                                    type="radio"
+                                    name="jobtype"
+                                    value="Part Time"
+                                >
+                                Part Time
+                            </label>
+
+                            <label class="radio-option">
+                                <input
+                                    type="radio"
+                                    name="jobtype"
+                                    value="Internship"
+                                >
+                                Internship
+                            </label>
+
+                            <label class="radio-option">
+                                <input
+                                    type="radio"
+                                    name="jobtype"
+                                    value="Remote"
+                                >
+                                Remote
+                            </label>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- SKILLS -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Your Skills *
+                        </label>
+
+                        <div class="skills-grid">
+
+                            <label>
+                                <input type="checkbox" name="skills" value="C">
+                                C
+                            </label>
+
+                            <label>
+                                <input type="checkbox" name="skills" value="C++">
+                                C++
+                            </label>
+
+                            <label>
+                                <input type="checkbox" name="skills" value="Java">
+                                Java
+                            </label>
+
+                            <label>
+                                <input type="checkbox" name="skills" value="Python">
+                                Python
+                            </label>
+
+                            <label>
+                                <input type="checkbox" name="skills" value="HTML">
+                                HTML
+                            </label>
+
+                            <label>
+                                <input type="checkbox" name="skills" value="CSS">
+                                CSS
+                            </label>
+
+                            <label>
+                                <input type="checkbox" name="skills" value="JavaScript">
+                                JavaScript
+                            </label>
+
+                            <label>
+                                <input type="checkbox" name="skills" value="React">
+                                React
+                            </label>
+
+                            <label>
+                                <input type="checkbox" name="skills" value="Node.js">
+                                Node.js
+                            </label>
+
+                            <label>
+                                <input type="checkbox" name="skills" value="Express.js">
+                                Express.js
+                            </label>
+
+                            <label>
+                                <input type="checkbox" name="skills" value="MongoDB">
+                                MongoDB
+                            </label>
+
+                            <label>
+                                <input type="checkbox" name="skills" value="MySQL">
+                                MySQL
+                            </label>
+
+                            <label>
+                                <input type="checkbox" name="skills" value="Spring Boot">
+                                Spring Boot
+                            </label>
+
+                            <label>
+                                <input type="checkbox" name="skills" value="Git">
+                                Git
+                            </label>
+
+                            <label>
+                                <input type="checkbox" name="skills" value="GitHub">
+                                GitHub
+                            </label>
+
+                            <label>
+                                <input type="checkbox" name="skills" value="AWS">
+                                AWS
+                            </label>
+
+                            <label>
+                                <input type="checkbox" name="skills" value="Docker">
+                                Docker
+                            </label>
+
+                            <label>
+                                <input type="checkbox" name="skills" value="Artificial Intelligence">
+                                Artificial Intelligence
+                            </label>
+
+                            <label>
+                                <input type="checkbox" name="skills" value="Machine Learning">
+                                Machine Learning
+                            </label>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- BUTTONS -->
+
+                    <div class="form-buttons">
+
+                        <button
+                            type="submit"
+                            class="primary-btn"
+                        >
+                            Analyze Resume
+                        </button>
+
+                        <button
+                            type="reset"
+                            class="reset-btn"
+                            id="resetBtn"
+                        >
+                            Reset
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+
+            <!-- PREVIEW -->
+
+            <div class="preview-card" id="previewContainer">
+
+                <div class="preview-header">
+
+                    <div>
+                        <span class="preview-label">
+                            RESUME PREVIEW
+                        </span>
+
+                        <h3>
+                            Uploaded Resume
+                        </h3>
+                    </div>
+
+                    <div class="preview-buttons">
+
+                        <button
+                            type="button"
+                            id="zoomOut"
+                            aria-label="Zoom out"
+                        >
+                            −
+                        </button>
+
+                        <button
+                            type="button"
+                            id="zoomIn"
+                            aria-label="Zoom in"
+                        >
+                            +
+                        </button>
+
+                        <button
+                            type="button"
+                            id="closePreview"
+                            aria-label="Close preview"
+                        >
+                            ×
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="preview-status"
+                    id="pdfMessage"
+                >
+                    Preparing preview...
+                </div>
+
+
+                <div class="pdf-viewer" id="pdfViewer">
+
+                    <canvas id="pdfCanvas"></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- PROGRESS -->
+
+        <div
+            class="progress-container"
+            id="progressContainer"
+            hidden
+        >
+            <div
+                class="progress-bar"
+                id="progressBar"
+            ></div>
+        </div>
+
+
+        <!-- RESULT -->
+
+        <div
+            class="result-card"
+            id="resultCard"
+        >
+
+            <div class="result-header">
+
+                <span>
+                    JOB-SPECIFIC ATS ANALYSIS
+                </span>
+
+                <h2>
+                    Your Resume Score
+                </h2>
+
+                <p id="resultText">
+                    Analysis complete.
+                </p>
+
+            </div>
+
+
+            <div class="score-area">
+
+                <div class="circle-container">
+
+                    <div class="meter">
+
+                        <svg viewBox="0 0 160 160">
+
+                            <circle
+                                class="bg"
+                                cx="80"
+                                cy="80"
+                                r="70"
+                            ></circle>
+
+                            <circle
+                                id="circle"
+                                cx="80"
+                                cy="80"
+                                r="70"
+                            ></circle>
+
+                        </svg>
+
+                        <div
+                            class="score-number"
+                            id="score"
+                        >
+                            0%
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="score-details">
+
+                    <span class="small-label">
+                        RESUME STRENGTH
+                    </span>
+
+                    <h3 id="resumeStrength">
+                        -
+                    </h3>
+
+                    <p id="scoreSummary">
+                        Your analysis will appear here.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- SCORE BREAKDOWN -->
+
+            <div class="score-breakdown">
+
+                <div class="metric-card">
+
+                    <span>Keyword Match</span>
+
+                    <strong id="keywordScore">
+                        0%
+                    </strong>
+
+                    <div class="metric-track">
+                        <div id="keywordScoreBar"></div>
+                    </div>
+
+                </div>
+
+
+                <div class="metric-card">
+
+                    <span>Skills Match</span>
+
+                    <strong id="skillsScore">
+                        0%
+                    </strong>
+
+                    <div class="metric-track">
+                        <div id="skillsScoreBar"></div>
+                    </div>
+
+                </div>
+
+
+                <div class="metric-card">
+
+                    <span>Experience Match</span>
+
+                    <strong id="experienceScore">
+                        0%
+                    </strong>
+
+                    <div class="metric-track">
+                        <div id="experienceScoreBar"></div>
+                    </div>
+
+                </div>
+
+
+                <div class="metric-card">
+
+                    <span>ATS Compatibility</span>
+
+                    <strong id="atsScore">
+                        0%
+                    </strong>
+
+                    <div class="metric-track">
+                        <div id="atsScoreBar"></div>
+                    </div>
+
+                </div>
+
+
+                <div class="metric-card">
+
+                    <span>Resume Quality</span>
+
+                    <strong id="qualityScore">
+                        0%
+                    </strong>
+
+                    <div class="metric-track">
+                        <div id="qualityScoreBar"></div>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- KEYWORDS -->
+
+            <div class="keyword-results">
+
+                <div class="keyword-panel matched-panel">
+
+                    <h3>
+                        ✅ Matched Keywords
+                    </h3>
+
+                    <div id="matchedKeywords">
+                        <span class="keyword-empty">
+                            No analysis yet.
+                        </span>
+                    </div>
+
+                </div>
+
+
+                <div class="keyword-panel missing-panel">
+
+                    <h3>
+                        ❌ Missing Keywords
+                    </h3>
+
+                    <div id="missingKeywords">
+                        <span class="keyword-empty">
+                            No analysis yet.
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- SUGGESTIONS -->
+
+            <div class="suggestions-box">
+
+                <h3>
+                    💡 Improvement Suggestions
+                </h3>
+
+                <ul id="suggestionList"></ul>
+
+            </div>
+
+
+            <div class="ats-disclaimer">
+
+                <strong>Important:</strong>
+                This is a CareerPilot AI heuristic ATS simulation.
+                Actual employer ATS systems use different proprietary
+                parsing and ranking methods.
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     JOBS
+========================= -->
+
+<section class="section alternate-section" id="jobs">
+
+    <div class="section-container">
+
+        <div class="section-heading">
+
+            <span>JOB DISCOVERY</span>
+
+            <h2>
+                Explore Sample Opportunities
+            </h2>
+
+            <p>
+                Search and filter the sample job listings below.
+            </p>
+
+        </div>
+
+
+        <div class="job-tools">
+
+            <input
+                type="search"
+                id="jobSearch"
+                placeholder="Search company, role or skill..."
+                aria-label="Search jobs"
+            >
+
+            <select
+                id="jobLocation"
+                aria-label="Filter jobs by location"
+            >
+                <option value="all">All Locations</option>
+                <option value="Remote">Remote</option>
+                <option value="Bangalore">Bangalore</option>
+                <option value="Delhi">Delhi</option>
+                <option value="Mumbai">Mumbai</option>
+                <option value="Hyderabad">Hyderabad</option>
+                <option value="Pune">Pune</option>
+                <option value="Noida">Noida</option>
+            </select>
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+            <table id="jobsTable">
+
+                <thead>
+
+                    <tr>
+                        <th>Company</th>
+                        <th>Role</th>
+                        <th>Location</th>
+                        <th>Experience</th>
+                        <th>Action</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>Google</td>
+                        <td>Software Engineer</td>
+                        <td>Bangalore</td>
+                        <td>2+ Years</td>
+                        <td><button class="job-btn" type="button">View</button></td>
+                    </tr>
+
+                    <tr>
+                        <td>Microsoft</td>
+                        <td>Frontend Developer</td>
+                        <td>Hyderabad</td>
+                        <td>1+ Years</td>
+                        <td><button class="job-btn" type="button">View</button></td>
+                    </tr>
+
+                    <tr>
+                        <td>Amazon</td>
+                        <td>Backend Developer</td>
+                        <td>Bangalore</td>
+                        <td>2+ Years</td>
+                        <td><button class="job-btn" type="button">View</button></td>
+                    </tr>
+
+                    <tr>
+                        <td>Adobe</td>
+                        <td>React Developer</td>
+                        <td>Noida</td>
+                        <td>1+ Years</td>
+                        <td><button class="job-btn" type="button">View</button></td>
+                    </tr>
+
+                    <tr>
+                        <td>Infosys</td>
+                        <td>Java Developer</td>
+                        <td>Pune</td>
+                        <td>0-2 Years</td>
+                        <td><button class="job-btn" type="button">View</button></td>
+                    </tr>
+
+                    <tr>
+                        <td>TCS</td>
+                        <td>Full Stack Developer</td>
+                        <td>Delhi</td>
+                        <td>1-3 Years</td>
+                        <td><button class="job-btn" type="button">View</button></td>
+                    </tr>
+
+                    <tr>
+                        <td>Wipro</td>
+                        <td>Python Developer</td>
+                        <td>Bangalore</td>
+                        <td>1-3 Years</td>
+                        <td><button class="job-btn" type="button">View</button></td>
+                    </tr>
+
+                    <tr>
+                        <td>Accenture</td>
+                        <td>Data Analyst</td>
+                        <td>Mumbai</td>
+                        <td>1-3 Years</td>
+                        <td><button class="job-btn" type="button">View</button></td>
+                    </tr>
+
+                    <tr>
+                        <td>Deloitte</td>
+                        <td>Cloud Engineer</td>
+                        <td>Hyderabad</td>
+                        <td>2+ Years</td>
+                        <td><button class="job-btn" type="button">View</button></td>
+                    </tr>
+
+                    <tr>
+                        <td>Flipkart</td>
+                        <td>Software Engineer</td>
+                        <td>Bangalore</td>
+                        <td>1-3 Years</td>
+                        <td><button class="job-btn" type="button">View</button></td>
+                    </tr>
+
+                    <tr>
+                        <td>Swiggy</td>
+                        <td>Frontend Engineer</td>
+                        <td>Bangalore</td>
+                        <td>1-3 Years</td>
+                        <td><button class="job-btn" type="button">View</button></td>
+                    </tr>
+
+                    <tr>
+                        <td>Zomato</td>
+                        <td>Backend Engineer</td>
+                        <td>Delhi</td>
+                        <td>2+ Years</td>
+                        <td><button class="job-btn" type="button">View</button></td>
+                    </tr>
+
+                    <tr>
+                        <td>Razorpay</td>
+                        <td>React Developer</td>
+                        <td>Bangalore</td>
+                        <td>1-3 Years</td>
+                        <td><button class="job-btn" type="button">View</button></td>
+                    </tr>
+
+                    <tr>
+                        <td>Paytm</td>
+                        <td>Java Developer</td>
+                        <td>Noida</td>
+                        <td>1-3 Years</td>
+                        <td><button class="job-btn" type="button">View</button></td>
+                    </tr>
+
+                    <tr>
+                        <td>IBM</td>
+                        <td>Cloud Developer</td>
+                        <td>Pune</td>
+                        <td>2+ Years</td>
+                        <td><button class="job-btn" type="button">View</button></td>
+                    </tr>
+
+                    <tr>
+                        <td>Oracle</td>
+                        <td>Java Engineer</td>
+                        <td>Bangalore</td>
+                        <td>2+ Years</td>
+                        <td><button class="job-btn" type="button">View</button></td>
+                    </tr>
+
+                    <tr>
+                        <td>Capgemini</td>
+                        <td>Software Developer</td>
+                        <td>Mumbai</td>
+                        <td>0-2 Years</td>
+                        <td><button class="job-btn" type="button">View</button></td>
+                    </tr>
+
+                    <tr>
+                        <td>HCLTech</td>
+                        <td>Full Stack Developer</td>
+                        <td>Noida</td>
+                        <td>1-3 Years</td>
+                        <td><button class="job-btn" type="button">View</button></td>
+                    </tr>
+
+                    <tr>
+                        <td>Tech Mahindra</td>
+                        <td>Python Engineer</td>
+                        <td>Pune</td>
+                        <td>1-3 Years</td>
+                        <td><button class="job-btn" type="button">View</button></td>
+                    </tr>
+
+                    <tr>
+                        <td>Zoho</td>
+                        <td>Software Developer</td>
+                        <td>Remote</td>
+                        <td>0-2 Years</td>
+                        <td><button class="job-btn" type="button">View</button></td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <div
+            class="no-jobs"
+            id="noJobs"
+        >
+            No jobs found.
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     CONTACT
+========================= -->
+
+<section class="section contact-section" id="contact">
+
+    <div class="section-container">
+
+        <div class="contact-card">
+
+            <div>
+
+                <h2>
+                    Ready to Improve Your Resume?
+                </h2>
+
+                <p>
+                    Analyze your resume against your target job today.
+                </p>
+
+            </div>
 
             <button
                 type="button"
-                id="closePreview">
-                ❌
+                class="primary-btn"
+                id="feedbackBtn"
+            >
+                Give Feedback
             </button>
 
         </div>
 
     </div>
 
-    <iframe id="previewBox"></iframe>
-    <!-- ==========================================
-     Step 59.4 - PDF.js Canvas
-========================================== -->
+</section>
 
-<canvas id="pdfCanvas"></canvas>
+</main>
 
-</div>
-<br>
-<br>
-<label>
 
-    Preferred Job Type
-
-</label>
-
-<br>
-
-<input
-    type="radio"
-    id="fulltime"
-    name="jobtype"
-    value="Full Time"
->
-
-<label for="fulltime">
-
-    Full Time
-
-</label>
-
-<br>
-
-<input
-    type="radio"
-    id="internship"
-    name="jobtype"
-    value="Internship"
->
-
-<label for="internship">
-
-    Internship
-
-</label>
-
-<br>
-
-<input
-    type="radio"
-    id="remote"
-    name="jobtype"
-    value="Remote"
->
-
-<label for="remote">
-
-    Remote
-
-</label>
-
-<br>
-<br>
-<label>
-
-    Skills
-
-</label>
-
-<br>
-
-<input type="checkbox" id="c" name="skills" value="C">
-<label for="c">C</label>
-
-<br>
-
-<input type="checkbox" id="cpp" name="skills" value="C++">
-<label for="cpp">C++</label>
-
-<br>
-
-<input type="checkbox" id="java" name="skills" value="Java">
-<label for="java">Java</label>
-
-<br>
-
-<input type="checkbox" id="python" name="skills" value="Python">
-<label for="python">Python</label>
-
-<br>
-
-<input type="checkbox" id="html" name="skills" value="HTML">
-<label for="html">HTML</label>
-
-<br>
-
-<input type="checkbox" id="css" name="skills" value="CSS">
-<label for="css">CSS</label>
-
-<br>
-
-<input type="checkbox" id="javascript" name="skills" value="JavaScript">
-<label for="javascript">JavaScript</label>
-
-<br>
-
-<input type="checkbox" id="react" name="skills" value="React">
-<label for="react">React</label>
-
-<br>
-
-<input type="checkbox" id="node" name="skills" value="Node.js">
-<label for="node">Node.js</label>
-
-<br>
-
-<input type="checkbox" id="express" name="skills" value="Express.js">
-<label for="express">Express.js</label>
-
-<br>
-
-<input type="checkbox" id="mongodb" name="skills" value="MongoDB">
-<label for="mongodb">MongoDB</label>
-
-<br>
-
-<input type="checkbox" id="mysql" name="skills" value="MySQL">
-<label for="mysql">MySQL</label>
-
-<br>
-
-<input type="checkbox" id="springboot" name="skills" value="Spring Boot">
-<label for="springboot">Spring Boot</label>
-
-<br>
-
-<input type="checkbox" id="git" name="skills" value="Git">
-<label for="git">Git</label>
-
-<br>
-
-<input type="checkbox" id="github" name="skills" value="GitHub">
-<label for="github">GitHub</label>
-
-<br>
-
-<input type="checkbox" id="aws" name="skills" value="AWS">
-<label for="aws">AWS</label>
-
-<br>
-
-<input type="checkbox" id="docker" name="skills" value="Docker">
-<label for="docker">Docker</label>
-
-<br>
-
-<input type="checkbox" id="ai" name="skills" value="Artificial Intelligence">
-<label for="ai">Artificial Intelligence</label>
-
-<br>
-
-<input type="checkbox" id="ml" name="skills" value="Machine Learning">
-<label for="ml">Machine Learning</label>
-
-<br><br>
-<label for="careergoal">
-
-    Career Goal
-
-</label>
-
-<br>
-
-<textarea
-    id="careergoal"
-    name="careergoal"
-    rows="5"
-    cols="50"
-    placeholder="Write your career goal here..."
-    required
-></textarea>
-
-<br>
-<br>
-
-
-<!-- =====================================
-     Step 47 - Analyze Button
-====================================== -->
-
-<button type="submit" id="analyzeBtn">
-
-    Analyze Resume
-
-</button>
-<button type="reset">
-
-    Clear Form
-
-</button>
-
-</form>
-<div id="resultCard">
-
-    <h2>Resume Analysis Result</h2>
-
-    <p id="resultText">
-
-        Waiting For Resume Analysis...
-
-    </p>
-   <div class="circle-container">
-
-    <div class="meter">
-
-        <svg width="160" height="160">
-
-            <circle
-                class="bg"
-                cx="80"
-                cy="80"
-                r="70">
-            </circle>
-
-            <circle
-                id="circle"
-                cx="80"
-                cy="80"
-                r="70">
-            </circle>
-
-        </svg>
-
-        <div id="score">0%</div>
-
-    </div>
-
-</div>
-
-    <h3 id="resumeStrength"></h3>
-    <h3>💡 AI Suggestions</h3>
-
-<ul id="suggestionList">
-
-</ul>
-    <div id="progressContainer">
-
-    <div id="progressBar"></div>
-
-</div>
-
-</div>
-
-
-
-<hr>
+<!-- =========================
+     FOOTER
+========================= -->
 
 <footer>
 
-    <p>
+    <div class="footer-content">
 
-        &copy; 2026 CareerPilot AI. All Rights Reserved.
+        <div class="footer-brand">
 
-    </p>
+            <h2>
+                CareerPilot <span>AI</span>
+            </h2>
 
-    <p>
+            <p>
+                Smarter resumes. Better opportunities.
+            </p>
 
-        Developed by Team CareerPilot AI
+        </div>
 
-    </p>
+
+        <div class="footer-links">
+
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <a href="#features">Features</a>
+            <a href="#resume-section">ATS Analyzer</a>
+            <a href="#jobs">Jobs</a>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer-bottom">
+
+        <span>
+            © 2026 CareerPilot AI
+        </span>
+
+        <span>
+            Resume analysis tool for career preparation
+        </span>
+
+    </div>
 
 </footer>
 
-</div>
-<script type="module">
-    import * as pdfjsLib from
-    "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs";
 
-    window.pdfjsLib = pdfjsLib;
-</script>
+<!-- =========================
+     TOAST
+========================= -->
+
+<div
+    class="toast"
+    id="toast"
+    role="status"
+    aria-live="polite"
+></div>
+
+
 <script src="script.js"></script>
 
-
 </body>
-
 </html>
