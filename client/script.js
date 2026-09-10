@@ -1,3492 +1,2848 @@
 /* =====================================================
-   CAREERPILOT AI
-   COMPLETE FRONTEND JAVASCRIPT
-   JOB-SPECIFIC ATS ANALYZER
-===================================================== */
+   CAREERPILOT AI - COMPLETE FRONTEND JAVASCRIPT
+   STEP 2 - JOB-SPECIFIC ATS UPGRADE
+   ===================================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
+  "use strict";
 
-    "use strict";
+  /* ===================================================
+     HELPERS
+     =================================================== */
 
-    /* =================================================
-       DOM ELEMENTS
-    ================================================= */
+  const $ = (id) => document.getElementById(id);
 
-    const startBtn = document.getElementById("startBtn");
-    const resumeSection = document.getElementById("resume-section");
+  const startBtn = $("startBtn");
+  const resumeSection = $("resume-section");
 
-    const mobileMenuBtn = document.getElementById("mobileMenuBtn");
-    const navLinks = document.getElementById("navLinks");
+  const mobileMenuBtn = $("mobileMenuBtn");
+  const navLinks = $("navLinks");
+  const themeToggle = $("themeToggle");
 
-    const themeToggle = document.getElementById("themeToggle");
+  const resumeForm = $("resumeForm");
+  const resumeInput = $("resume");
+  const fileName = $("fileName");
 
-    const resumeForm = document.getElementById("resumeForm");
+  const previewContainer = $("previewContainer");
+  const pdfMessage = $("pdfMessage");
+  const pdfViewer = $("pdfViewer");
+  const pdfCanvas = $("pdfCanvas");
 
-    const fullname = document.getElementById("fullname");
-    const email = document.getElementById("email");
-    const password = document.getElementById("password");
-    const experience = document.getElementById("experience");
+  const zoomIn = $("zoomIn");
+  const zoomOut = $("zoomOut");
+  const closePreview = $("closePreview");
 
-    const resumeInput = document.getElementById("resume");
-    const careerGoal = document.getElementById("careergoal");
-    const jobDescription = document.getElementById("jobDescription");
+  const resultCard = $("resultCard");
+  const resultText = $("resultText");
+  const progressBar = $("progressBar");
+  const score = $("score");
+  const circle = $("circle");
+  const resumeStrength = $("resumeStrength");
+  const suggestionList = $("suggestionList");
 
-    const fileName = document.getElementById("fileName");
+  const matchedKeywords = $("matchedKeywords");
+  const missingKeywords = $("missingKeywords");
+  const scoreBreakdown = $("scoreBreakdown");
 
-    const previewContainer =
-        document.getElementById("previewContainer");
+  const resetBtn = $("resetBtn");
+  const feedbackBtn = $("feedbackBtn");
 
-    const pdfMessage =
-        document.getElementById("pdfMessage");
+  const jobSearch = $("jobSearch");
+  const jobLocation = $("jobLocation");
+  const jobsTable = $("jobsTable");
+  const noJobs = $("noJobs");
 
-    const pdfViewer =
-        document.getElementById("pdfViewer");
+  const jobDescription = $("jobDescription");
 
-    const pdfCanvas =
-        document.getElementById("pdfCanvas");
+  const targetJobTitle = $("targetJobTitle");
+  const targetCompany = $("targetCompany");
 
-    const zoomIn =
-        document.getElementById("zoomIn");
+  const jobTargetInfo = $("jobTargetInfo");
+  const jobMatchScore = $("jobMatchScore");
+  const jobMatchFill = $("jobMatchFill");
+  const reportTargetTitle = $("reportTargetTitle");
+  const reportTargetCompany = $("reportTargetCompany");
+  const reportExperienceFit = $("reportExperienceFit");
 
-    const zoomOut =
-        document.getElementById("zoomOut");
+  const requiredKeywords = $("requiredKeywords");
+  const preferredKeywords = $("preferredKeywords");
+  const requiredCount = $("requiredCount");
+  const preferredCount = $("preferredCount");
 
-    const closePreview =
-        document.getElementById("closePreview");
+  const criticalMissingSkills = $("criticalMissingSkills");
+  const experienceGap = $("experienceGap");
+  const improvementPotential = $("improvementPotential");
+  const skillPriority = $("skillPriority");
 
-    const resultCard =
-        document.getElementById("resultCard");
+  /* ===================================================
+     STATE
+     =================================================== */
 
-    const resultText =
-        document.getElementById("resultText");
+  let pdfDoc = null;
+  let pdfScale = 1;
+  let currentPdfBytes = null;
+  let toastTimer = null;
 
-    const progressContainer =
-        document.getElementById("progressContainer");
+  let pdfjsLib = null;
+  let mammothLib = null;
+  let tesseractLib = null;
 
-    const progressBar =
-        document.getElementById("progressBar");
+  /* ===================================================
+     LIBRARY LOADER
+     =================================================== */
 
-    const circle =
-        document.getElementById("circle");
+  function loadScript(src) {
+    return new Promise((resolve, reject) => {
+      const existing = document.querySelector(
+        `script[data-careerpilot-src="${src}"]`
+      );
 
-    const score =
-        document.getElementById("score");
+      if (existing) {
+        existing.addEventListener("load", resolve, { once: true });
+        existing.addEventListener("error", reject, { once: true });
 
-    const resumeStrength =
-        document.getElementById("resumeStrength");
-
-    const scoreSummary =
-        document.getElementById("scoreSummary");
-
-    const suggestionList =
-        document.getElementById("suggestionList");
-
-    const matchedKeywords =
-        document.getElementById("matchedKeywords");
-
-    const missingKeywords =
-        document.getElementById("missingKeywords");
-
-    const keywordScore =
-        document.getElementById("keywordScore");
-
-    const skillsScore =
-        document.getElementById("skillsScore");
-
-    const experienceScore =
-        document.getElementById("experienceScore");
-
-    const atsScore =
-        document.getElementById("atsScore");
-
-    const qualityScore =
-        document.getElementById("qualityScore");
-
-    const keywordScoreBar =
-        document.getElementById("keywordScoreBar");
-
-    const skillsScoreBar =
-        document.getElementById("skillsScoreBar");
-
-    const experienceScoreBar =
-        document.getElementById("experienceScoreBar");
-
-    const atsScoreBar =
-        document.getElementById("atsScoreBar");
-
-    const qualityScoreBar =
-        document.getElementById("qualityScoreBar");
-
-    const jobSearch =
-        document.getElementById("jobSearch");
-
-    const jobLocation =
-        document.getElementById("jobLocation");
-
-    const jobsTable =
-        document.getElementById("jobsTable");
-
-    const noJobs =
-        document.getElementById("noJobs");
-
-    const feedbackBtn =
-        document.getElementById("feedbackBtn");
-
-    const resetBtn =
-        document.getElementById("resetBtn");
-
-    const toast =
-        document.getElementById("toast");
-
-
-    /* =================================================
-       STATE
-    ================================================= */
-
-    let pdfDocument = null;
-
-    let pdfScale = 1.25;
-
-    let toastTimer = null;
-
-    let analysisInProgress = false;
-
-
-    /* =================================================
-       UTILITY
-    ================================================= */
-
-    function showToast(message) {
-
-        if (!toast) {
-            return;
+        if (
+          existing.dataset.loaded === "true" ||
+          existing.readyState === "complete"
+        ) {
+          resolve();
         }
 
-        toast.textContent = message;
+        return;
+      }
 
-        toast.classList.add("show");
+      const script = document.createElement("script");
+      script.src = src;
+      script.async = true;
+      script.dataset.careerpilotSrc = src;
 
-        clearTimeout(toastTimer);
+      script.onload = () => {
+        script.dataset.loaded = "true";
+        resolve();
+      };
 
-        toastTimer = setTimeout(() => {
-            toast.classList.remove("show");
-        }, 3500);
+      script.onerror = reject;
+
+      document.head.appendChild(script);
+    });
+  }
+
+  async function loadLibraries() {
+    if (!pdfjsLib) {
+      try {
+        await loadScript(
+          "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"
+        );
+
+        pdfjsLib = window.pdfjsLib || window["pdfjs-dist/build/pdf"];
+      } catch (error) {
+        console.warn("PDF.js failed to load.", error);
+      }
     }
 
-
-    function escapeHTML(value) {
-
-        return String(value)
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
+    if (pdfjsLib) {
+      try {
+        pdfjsLib.GlobalWorkerOptions.workerSrc =
+          "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+      } catch (error) {
+        console.warn("PDF worker configuration failed.", error);
+      }
     }
 
+    if (!mammothLib) {
+      try {
+        await loadScript(
+          "https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.8.0/mammoth.browser.min.js"
+        );
 
-    function clamp(value, min, max) {
-        return Math.max(min, Math.min(max, value));
+        mammothLib = window.mammoth;
+      } catch (error) {
+        console.warn("Mammoth failed to load.", error);
+      }
     }
 
+    if (!tesseractLib) {
+      try {
+        await loadScript(
+          "https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"
+        );
 
-    function normalizeText(text) {
+        tesseractLib = window.Tesseract;
+      } catch (error) {
+        console.warn("Tesseract failed to load.", error);
+      }
+    }
+  }
 
-        return String(text || "")
-            .replace(/\r/g, "\n")
-            .replace(/[•●▪◦]/g, " ")
-            .replace(/[^\S\n]+/g, " ")
-            .replace(/\n{3,}/g, "\n\n")
-            .toLowerCase()
-            .trim();
+  /* ===================================================
+     TOAST
+     =================================================== */
+
+  function showToast(message) {
+    const toast = $("toast");
+
+    if (!toast) {
+      return;
     }
 
-
-    function cleanForMatching(text) {
-
-        return normalizeText(text)
-            .replace(/[\/|,;:()[\]{}]+/g, " ")
-            .replace(/\s+/g, " ")
-            .trim();
-    }
-
-
-    function countWords(text) {
-
-        const clean = cleanForMatching(text);
-
-        if (!clean) {
-            return 0;
-        }
-
-        return clean.split(/\s+/).length;
-    }
-
-
-    function unique(array) {
-
-        return [...new Set(array)];
-    }
-
-
-    function escapeRegex(value) {
-
-        return String(value)
-            .replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    }
-
-
-    function containsTerm(text, term) {
-
-        const source = cleanForMatching(text);
-
-        const target = cleanForMatching(term);
-
-        if (!source || !target) {
-            return false;
-        }
-
-        const escaped = escapeRegex(target)
-            .replace(/\s+/g, "\\s+");
-
-        const regex =
-            new RegExp(
-                `(?:^|\\s)${escaped}(?=\\s|$)`,
-                "i"
-            );
-
-        return regex.test(source);
-    }
-
-
-    function setProgress(value) {
-
-        if (!progressBar) {
-            return;
-        }
-
-        const safe = clamp(value, 0, 100);
-
-        progressBar.style.width = `${safe}%`;
-    }
-
-
-    /* =================================================
-       START BUTTON
-    ================================================= */
-
-    if (startBtn && resumeSection) {
-
-        startBtn.addEventListener("click", () => {
-
-            resumeSection.scrollIntoView({
-                behavior: "smooth",
-                block: "start"
-            });
-
-        });
-
-    }
-
-
-    /* =================================================
-       MOBILE MENU
-    ================================================= */
-
-    if (mobileMenuBtn && navLinks) {
-
-        mobileMenuBtn.addEventListener("click", () => {
-
-            const active =
-                navLinks.classList.toggle("active");
-
-            mobileMenuBtn.setAttribute(
-                "aria-expanded",
-                String(active)
-            );
-
-            mobileMenuBtn.textContent =
-                active ? "✕" : "☰";
-
-        });
-
-
-        navLinks.querySelectorAll("a").forEach(link => {
-
-            link.addEventListener("click", () => {
-
-                navLinks.classList.remove("active");
-
-                mobileMenuBtn.setAttribute(
-                    "aria-expanded",
-                    "false"
-                );
-
-                mobileMenuBtn.textContent = "☰";
-
-            });
-
-        });
-
-    }
-
-
-    /* =================================================
-       DARK MODE
-    ================================================= */
-
-    const savedTheme =
-        localStorage.getItem("careerPilotTheme");
-
-    if (savedTheme === "dark") {
-
-        document.body.classList.add("dark-mode");
-
-    }
-
-
-    function updateThemeIcon() {
-
-        if (!themeToggle) {
-            return;
-        }
-
-        themeToggle.textContent =
-            document.body.classList.contains("dark-mode")
-                ? "☀️"
-                : "🌙";
-
-    }
-
-
-    updateThemeIcon();
-
+    toast.textContent = message;
+    toast.classList.add("show");
+
+    clearTimeout(toastTimer);
+
+    toastTimer = setTimeout(() => {
+      toast.classList.remove("show");
+    }, 3500);
+  }
+
+  /* ===================================================
+     HERO
+     =================================================== */
+
+  if (startBtn && resumeSection) {
+    startBtn.addEventListener("click", () => {
+      resumeSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    });
+  }
+
+  /* ===================================================
+     MOBILE MENU
+     =================================================== */
+
+  if (mobileMenuBtn && navLinks) {
+    mobileMenuBtn.addEventListener("click", () => {
+      const active = navLinks.classList.toggle("active");
+
+      mobileMenuBtn.setAttribute(
+        "aria-expanded",
+        String(active)
+      );
+
+      mobileMenuBtn.setAttribute(
+        "aria-label",
+        active ? "Close menu" : "Open menu"
+      );
+    });
+
+    navLinks.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        navLinks.classList.remove("active");
+        mobileMenuBtn.setAttribute("aria-expanded", "false");
+        mobileMenuBtn.setAttribute("aria-label", "Open menu");
+      });
+    });
+  }
+
+  /* ===================================================
+     DARK MODE
+     =================================================== */
+
+  const savedTheme = localStorage.getItem("careerPilotTheme");
+
+  if (savedTheme === "dark") {
+    document.body.classList.add("dark-mode");
 
     if (themeToggle) {
+      themeToggle.textContent = "☀️";
+    }
+  }
 
-        themeToggle.addEventListener("click", () => {
+  if (themeToggle) {
+    themeToggle.addEventListener("click", () => {
+      const dark = document.body.classList.toggle("dark-mode");
 
-            document.body.classList.toggle("dark-mode");
+      localStorage.setItem(
+        "careerPilotTheme",
+        dark ? "dark" : "light"
+      );
 
-            const isDark =
-                document.body.classList.contains("dark-mode");
+      themeToggle.textContent = dark ? "☀️" : "🌙";
+    });
+  }
 
-            localStorage.setItem(
-                "careerPilotTheme",
-                isDark ? "dark" : "light"
-            );
+  /* ===================================================
+     FILE HANDLING
+     =================================================== */
 
-            updateThemeIcon();
+  if (resumeInput) {
+    resumeInput.addEventListener("change", async () => {
+      const file = resumeInput.files && resumeInput.files[0];
 
+      if (!file) {
+        fileName.textContent = "No file selected";
+        return;
+      }
+
+      const extension = getExtension(file.name);
+
+      if (!["pdf", "docx"].includes(extension)) {
+        resumeInput.value = "";
+        fileName.textContent = "No file selected";
+        showToast("Please choose a PDF or DOCX file.");
+        return;
+      }
+
+      fileName.textContent =
+        `${file.name} • ${formatBytes(file.size)}`;
+
+      if (extension === "pdf") {
+        await preparePdfPreview(file);
+      } else {
+        previewContainer.style.display = "none";
+      }
+    });
+  }
+
+  function getExtension(name) {
+    const parts = name.toLowerCase().split(".");
+    return parts.length > 1 ? parts.pop() : "";
+  }
+
+  function formatBytes(bytes) {
+    if (!Number.isFinite(bytes) || bytes <= 0) {
+      return "0 KB";
+    }
+
+    const units = ["Bytes", "KB", "MB", "GB"];
+    const index = Math.min(
+      Math.floor(Math.log(bytes) / Math.log(1024)),
+      units.length - 1
+    );
+
+    return `${(bytes / Math.pow(1024, index)).toFixed(
+      index === 0 ? 0 : 1
+    )} ${units[index]}`;
+  }
+
+  /* ===================================================
+     PDF PREVIEW
+     =================================================== */
+
+  async function preparePdfPreview(file) {
+    previewContainer.style.display = "block";
+
+    pdfMessage.textContent = "Loading PDF preview...";
+
+    try {
+      await loadLibraries();
+
+      if (!pdfjsLib) {
+        throw new Error("PDF viewer library could not be loaded.");
+      }
+
+      const arrayBuffer = await file.arrayBuffer();
+
+      currentPdfBytes = new Uint8Array(arrayBuffer);
+
+      pdfDoc = await pdfjsLib.getDocument({
+        data: currentPdfBytes
+      }).promise;
+
+      pdfScale = 1;
+
+      await renderPdfPage(1);
+
+      pdfMessage.textContent =
+        `Preview ready • ${pdfDoc.numPages} page${pdfDoc.numPages === 1 ? "" : "s"}`;
+
+    } catch (error) {
+      console.error(error);
+
+      pdfMessage.textContent =
+        "Preview unavailable. The analyzer can still attempt text extraction.";
+
+      showToast(
+        "PDF preview could not be loaded, but analysis may still work."
+      );
+    }
+  }
+
+  async function renderPdfPage(pageNumber) {
+    if (!pdfDoc || !pdfCanvas) {
+      return;
+    }
+
+    const page = await pdfDoc.getPage(pageNumber);
+
+    const viewport = page.getViewport({
+      scale: pdfScale
+    });
+
+    const context = pdfCanvas.getContext("2d");
+
+    pdfCanvas.width = viewport.width;
+    pdfCanvas.height = viewport.height;
+
+    pdfCanvas.style.transform =
+      `scale(${Math.max(pdfScale, 0.7)})`;
+
+    await page.render({
+      canvasContext: context,
+      viewport
+    }).promise;
+  }
+
+  if (zoomIn) {
+    zoomIn.addEventListener("click", async () => {
+      if (!pdfDoc) {
+        return;
+      }
+
+      pdfScale = Math.min(pdfScale + 0.15, 2.5);
+
+      try {
+        await renderPdfPage(1);
+      } catch (error) {
+        console.error(error);
+      }
+    });
+  }
+
+  if (zoomOut) {
+    zoomOut.addEventListener("click", async () => {
+      if (!pdfDoc) {
+        return;
+      }
+
+      pdfScale = Math.max(pdfScale - 0.15, 0.5);
+
+      try {
+        await renderPdfPage(1);
+      } catch (error) {
+        console.error(error);
+      }
+    });
+  }
+
+  if (closePreview) {
+    closePreview.addEventListener("click", () => {
+      previewContainer.style.display = "none";
+    });
+  }
+
+  /* ===================================================
+     TEXT EXTRACTION
+     =================================================== */
+
+  async function extractResumeText(file) {
+    const extension = getExtension(file.name);
+
+    if (extension === "pdf") {
+      return extractPdfText(file);
+    }
+
+    if (extension === "docx") {
+      return extractDocxText(file);
+    }
+
+    throw new Error("Unsupported resume format.");
+  }
+
+  async function extractPdfText(file) {
+    await loadLibraries();
+
+    if (!pdfjsLib) {
+      throw new Error(
+        "PDF reader could not be loaded. Please check your internet connection."
+      );
+    }
+
+    const buffer = await file.arrayBuffer();
+
+    const loadingTask = pdfjsLib.getDocument({
+      data: new Uint8Array(buffer)
+    });
+
+    const doc = await loadingTask.promise;
+
+    let allText = "";
+
+    for (let pageNumber = 1; pageNumber <= doc.numPages; pageNumber++) {
+      const page = await doc.getPage(pageNumber);
+
+      const content = await page.getTextContent();
+
+      const pageText = content.items
+        .map((item) => item.str || "")
+        .join(" ");
+
+      allText += `\n${pageText}\n`;
+    }
+
+    const cleaned = cleanText(allText);
+
+    if (isUsefulResumeText(cleaned)) {
+      return cleaned;
+    }
+
+    showToast(
+      "This PDF appears image-based. Starting OCR fallback..."
+    );
+
+    return extractPdfWithOCR(doc);
+  }
+
+  async function extractPdfWithOCR(doc) {
+    await loadLibraries();
+
+    if (!tesseractLib) {
+      throw new Error(
+        "OCR library could not be loaded for this PDF."
+      );
+    }
+
+    const worker = await tesseractLib.createWorker("eng");
+
+    let combined = "";
+
+    try {
+      for (let pageNumber = 1; pageNumber <= doc.numPages; pageNumber++) {
+        pdfMessage.textContent =
+          `OCR processing page ${pageNumber} of ${doc.numPages}...`;
+
+        const page = await doc.getPage(pageNumber);
+
+        const viewport = page.getViewport({
+          scale: 1.6
         });
 
-    }
-
-
-    /* =================================================
-       EXTERNAL SCRIPT LOADER
-    ================================================= */
-
-    const scriptCache = new Map();
-
-
-    function loadExternalScript(src, globalName) {
-
-        if (
-            globalName &&
-            window[globalName]
-        ) {
-            return Promise.resolve(
-                window[globalName]
-            );
-        }
-
-
-        if (scriptCache.has(src)) {
-            return scriptCache.get(src);
-        }
-
-
-        const promise =
-            new Promise((resolve, reject) => {
-
-                const existing =
-                    document.querySelector(
-                        `script[src="${src}"]`
-                    );
-
-
-                if (existing) {
-
-                    existing.addEventListener(
-                        "load",
-                        () => {
-
-                            if (
-                                globalName &&
-                                window[globalName]
-                            ) {
-                                resolve(
-                                    window[globalName]
-                                );
-                            } else {
-                                resolve(null);
-                            }
-
-                        },
-                        { once: true }
-                    );
-
-
-                    existing.addEventListener(
-                        "error",
-                        reject,
-                        { once: true }
-                    );
-
-                    return;
-                }
-
-
-                const script =
-                    document.createElement("script");
-
-                script.src = src;
-
-                script.async = true;
-
-                script.onload = () => {
-
-                    if (
-                        globalName &&
-                        !window[globalName]
-                    ) {
-
-                        reject(
-                            new Error(
-                                `${globalName} failed to load.`
-                            )
-                        );
-
-                        return;
-                    }
-
-                    resolve(
-                        globalName
-                            ? window[globalName]
-                            : null
-                    );
-
-                };
-
-
-                script.onerror = () => {
-
-                    reject(
-                        new Error(
-                            `Unable to load external library: ${src}`
-                        )
-                    );
-
-                };
-
-
-                document.head.appendChild(script);
-
-            });
-
-
-        scriptCache.set(src, promise);
-
-        return promise;
-    }
-
-
-    /* =================================================
-       PDF.JS
-    ================================================= */
-
-    async function loadPDFJS() {
-
-        const pdfjs =
-            await loadExternalScript(
-                "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js",
-                "pdfjsLib"
-            );
-
-
-        if (
-            pdfjs &&
-            pdfjs.GlobalWorkerOptions
-        ) {
-
-            pdfjs.GlobalWorkerOptions.workerSrc =
-                "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
-
-        }
-
-
-        return pdfjs;
-    }
-
-
-    /* =================================================
-       MAMMOTH
-    ================================================= */
-
-    async function loadMammoth() {
-
-        return loadExternalScript(
-            "https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.8.0/mammoth.browser.min.js",
-            "mammoth"
-        );
-
-    }
-
-
-    /* =================================================
-       TESSERACT
-    ================================================= */
-
-    async function loadTesseract() {
-
-        return loadExternalScript(
-            "https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js",
-            "Tesseract"
-        );
-
-    }
-
-
-    /* =================================================
-       FILE NAME
-    ================================================= */
-
-    if (resumeInput) {
-
-        resumeInput.addEventListener("change", async () => {
-
-            const file =
-                resumeInput.files &&
-                resumeInput.files[0];
-
-
-            if (!file) {
-
-                if (fileName) {
-                    fileName.textContent =
-                        "No file selected";
-                }
-
-                return;
-            }
-
-
-            if (fileName) {
-                fileName.textContent =
-                    `${file.name} • ${formatBytes(file.size)}`;
-            }
-
-
-            try {
-
-                await prepareResumePreview(file);
-
-            } catch (error) {
-
-                console.error(error);
-
-                showToast(
-                    "Resume preview could not be prepared."
-                );
-
-            }
-
-        });
-
-    }
-
-
-    function formatBytes(bytes) {
-
-        if (!bytes) {
-            return "0 B";
-        }
-
-        const units =
-            ["B", "KB", "MB", "GB"];
-
-        const index =
-            Math.floor(
-                Math.log(bytes) /
-                Math.log(1024)
-            );
-
-        const safeIndex =
-            Math.min(index, units.length - 1);
-
-        return (
-            bytes /
-            Math.pow(1024, safeIndex)
-        ).toFixed(
-            safeIndex === 0 ? 0 : 1
-        ) + ` ${units[safeIndex]}`;
-
-    }
-
-
-    /* =================================================
-       PDF PREVIEW
-    ================================================= */
-
-    async function prepareResumePreview(file) {
-
-        const extension =
-            getExtension(file.name);
-
-
-        if (previewContainer) {
-            previewContainer.classList.add("active");
-        }
-
-
-        if (pdfMessage) {
-            pdfMessage.textContent =
-                "Preparing resume...";
-        }
-
-
-        if (extension === "pdf") {
-
-            await renderPDF(file);
-
-            return;
-        }
-
-
-        if (extension === "docx") {
-
-            if (pdfMessage) {
-                pdfMessage.textContent =
-                    "DOCX selected. Text extraction will be used for ATS analysis.";
-            }
-
-            if (pdfCanvas) {
-
-                const context =
-                    pdfCanvas.getContext("2d");
-
-                context.clearRect(
-                    0,
-                    0,
-                    pdfCanvas.width,
-                    pdfCanvas.height
-                );
-
-            }
-
-            return;
-        }
-
-
-        if (extension === "doc") {
-
-            if (pdfMessage) {
-                pdfMessage.textContent =
-                    "Legacy .doc files are not supported. Please upload PDF or DOCX.";
-            }
-
-            return;
-        }
-
-    }
-
-
-    function getExtension(filename) {
-
-        const parts =
-            String(filename)
-                .toLowerCase()
-                .split(".");
-
-        return parts.length > 1
-            ? parts.pop()
-            : "";
-    }
-
-
-    async function renderPDF(file) {
-
-        const pdfjs =
-            await loadPDFJS();
-
-
-        const buffer =
-            await file.arrayBuffer();
-
-
-        const loadingTask =
-            pdfjs.getDocument({
-                data: buffer
-            });
-
-
-        pdfDocument =
-            await loadingTask.promise;
-
-
-        pdfScale = 1.25;
-
-
-        await renderPDFPage();
-
-
-        if (pdfMessage) {
-
-            pdfMessage.textContent =
-                `PDF loaded successfully • ${pdfDocument.numPages} page${pdfDocument.numPages === 1 ? "" : "s"}`;
-
-        }
-
-    }
-
-
-    async function renderPDFPage() {
-
-        if (!pdfDocument || !pdfCanvas) {
-            return;
-        }
-
-
-        const page =
-            await pdfDocument.getPage(1);
-
-
-        const viewport =
-            page.getViewport({
-                scale: pdfScale
-            });
-
-
-        pdfCanvas.width =
-            viewport.width;
-
-        pdfCanvas.height =
-            viewport.height;
-
-
-        const context =
-            pdfCanvas.getContext("2d");
-
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
+
+        canvas.width = Math.ceil(viewport.width);
+        canvas.height = Math.ceil(viewport.height);
 
         await page.render({
-            canvasContext: context,
-            viewport
+          canvasContext: context,
+          viewport
         }).promise;
 
+        const result = await worker.recognize(canvas);
+
+        combined += `\n${result.data.text}\n`;
+      }
+    } finally {
+      await worker.terminate();
     }
 
+    return cleanText(combined);
+  }
 
-    if (zoomIn) {
+  async function extractDocxText(file) {
+    await loadLibraries();
 
-        zoomIn.addEventListener("click", async () => {
-
-            if (!pdfDocument) {
-                return;
-            }
-
-            pdfScale =
-                clamp(
-                    pdfScale + 0.15,
-                    0.5,
-                    3
-                );
-
-            await renderPDFPage();
-
-        });
-
+    if (!mammothLib) {
+      throw new Error(
+        "DOCX reader could not be loaded."
+      );
     }
 
+    const buffer = await file.arrayBuffer();
 
-    if (zoomOut) {
+    const result = await mammothLib.extractRawText({
+      arrayBuffer: buffer
+    });
 
-        zoomOut.addEventListener("click", async () => {
+    return cleanText(result.value);
+  }
 
-            if (!pdfDocument) {
-                return;
-            }
+  function cleanText(text) {
+    return String(text || "")
+      .replace(/\u00a0/g, " ")
+      .replace(/[ \t]+/g, " ")
+      .replace(/\n{3,}/g, "\n\n")
+      .trim();
+  }
 
-            pdfScale =
-                clamp(
-                    pdfScale - 0.15,
-                    0.5,
-                    3
-                );
-
-            await renderPDFPage();
-
-        });
-
+  function isUsefulResumeText(text) {
+    if (!text || text.length < 80) {
+      return false;
     }
 
+    const words = text.split(/\s+/).filter(Boolean);
 
-    if (closePreview) {
-
-        closePreview.addEventListener("click", () => {
-
-            if (previewContainer) {
-                previewContainer.classList.remove("active");
-            }
-
-        });
-
+    if (words.length < 25) {
+      return false;
     }
 
+    const alphabetic = text.replace(/[^a-z]/gi, "");
 
-    /* =================================================
-       PDF TEXT EXTRACTION
-    ================================================= */
+    return alphabetic.length >= 40;
+  }
 
-    async function extractPDFText(file) {
+  /* ===================================================
+     ATS SKILL DATABASE
+     =================================================== */
 
-        const pdfjs =
-            await loadPDFJS();
+  const SKILL_ALIASES = {
+    "JavaScript": [
+      "javascript",
+      "js",
+      "ecmascript"
+    ],
 
+    "TypeScript": [
+      "typescript",
+      "ts"
+    ],
 
-        const buffer =
-            await file.arrayBuffer();
+    "React": [
+      "react",
+      "react.js",
+      "reactjs"
+    ],
 
+    "Angular": [
+      "angular",
+      "angular.js"
+    ],
 
-        const pdf =
-            await pdfjs
-                .getDocument({
-                    data: buffer
-                })
-                .promise;
+    "Vue.js": [
+      "vue",
+      "vue.js",
+      "vuejs"
+    ],
 
+    "Node.js": [
+      "node",
+      "node.js",
+      "nodejs"
+    ],
 
-        let completeText = "";
+    "Express.js": [
+      "express",
+      "express.js",
+      "expressjs"
+    ],
 
+    "Python": [
+      "python"
+    ],
 
-        for (
-            let pageNumber = 1;
-            pageNumber <= pdf.numPages;
-            pageNumber++
+    "Java": [
+      "java"
+    ],
+
+    "C++": [
+      "c++",
+      "cpp"
+    ],
+
+    "C": [
+      "c programming",
+      " c "
+    ],
+
+    "HTML": [
+      "html",
+      "html5"
+    ],
+
+    "CSS": [
+      "css",
+      "css3"
+    ],
+
+    "Tailwind CSS": [
+      "tailwind",
+      "tailwind css"
+    ],
+
+    "Bootstrap": [
+      "bootstrap"
+    ],
+
+    "MongoDB": [
+      "mongodb",
+      "mongo db",
+      "mongo"
+    ],
+
+    "MySQL": [
+      "mysql"
+    ],
+
+    "PostgreSQL": [
+      "postgresql",
+      "postgres"
+    ],
+
+    "SQL": [
+      "sql"
+    ],
+
+    "NoSQL": [
+      "nosql",
+      "no sql"
+    ],
+
+    "Spring Boot": [
+      "spring boot",
+      "springboot"
+    ],
+
+    "Git": [
+      "git"
+    ],
+
+    "GitHub": [
+      "github",
+      "git hub"
+    ],
+
+    "AWS": [
+      "aws",
+      "amazon web services"
+    ],
+
+    "Azure": [
+      "azure",
+      "microsoft azure"
+    ],
+
+    "Google Cloud": [
+      "google cloud",
+      "gcp"
+    ],
+
+    "Docker": [
+      "docker"
+    ],
+
+    "Kubernetes": [
+      "kubernetes",
+      "k8s"
+    ],
+
+    "Jenkins": [
+      "jenkins"
+    ],
+
+    "REST API": [
+      "rest api",
+      "restful api",
+      "rest services",
+      "rest"
+    ],
+
+    "GraphQL": [
+      "graphql"
+    ],
+
+    "Machine Learning": [
+      "machine learning",
+      "ml"
+    ],
+
+    "Artificial Intelligence": [
+      "artificial intelligence",
+      "ai"
+    ],
+
+    "Deep Learning": [
+      "deep learning",
+      "dl"
+    ],
+
+    "TensorFlow": [
+      "tensorflow"
+    ],
+
+    "PyTorch": [
+      "pytorch"
+    ],
+
+    "Pandas": [
+      "pandas"
+    ],
+
+    "NumPy": [
+      "numpy",
+      "num py"
+    ],
+
+    "Power BI": [
+      "power bi",
+      "powerbi"
+    ],
+
+    "Excel": [
+      "excel",
+      "microsoft excel"
+    ],
+
+    "Figma": [
+      "figma"
+    ],
+
+    "Selenium": [
+      "selenium"
+    ],
+
+    "Jira": [
+      "jira"
+    ],
+
+    "Agile": [
+      "agile"
+    ],
+
+    "Scrum": [
+      "scrum"
+    ]
+  };
+
+  const STOP_WORDS = new Set([
+    "the",
+    "and",
+    "for",
+    "with",
+    "that",
+    "this",
+    "from",
+    "your",
+    "you",
+    "our",
+    "are",
+    "will",
+    "have",
+    "has",
+    "not",
+    "but",
+    "job",
+    "role",
+    "work",
+    "team",
+    "using",
+    "used",
+    "use",
+    "into",
+    "their",
+    "they",
+    "them",
+    "who",
+    "what",
+    "when",
+    "where",
+    "which",
+    "while",
+    "about",
+    "through",
+    "such",
+    "more",
+    "than",
+    "also",
+    "must",
+    "should",
+    "would",
+    "could",
+    "can",
+    "may",
+    "able",
+    "ability",
+    "skills",
+    "skill",
+    "experience",
+    "years",
+    "year",
+    "required",
+    "preferred",
+    "candidate",
+    "candidates",
+    "responsibilities",
+    "responsibility",
+    "requirements",
+    "requirement",
+    "description",
+    "looking",
+    "seeking",
+    "strong",
+    "good",
+    "excellent",
+    "knowledge",
+    "including",
+    "etc",
+    "please",
+    "apply",
+    "company",
+    "position",
+    "opportunity"
+  ]);
+
+  const ACTION_VERBS = [
+    "developed",
+    "designed",
+    "built",
+    "created",
+    "implemented",
+    "improved",
+    "optimized",
+    "automated",
+    "managed",
+    "led",
+    "delivered",
+    "deployed",
+    "integrated",
+    "tested",
+    "analyzed",
+    "engineered",
+    "maintained",
+    "configured",
+    "collaborated",
+    "architected",
+    "launched",
+    "reduced",
+    "increased",
+    "streamlined"
+  ];
+
+  const SECTION_PATTERNS = {
+    summary: /\b(summary|profile|objective|professional summary)\b/i,
+    experience: /\b(experience|work experience|employment|professional experience)\b/i,
+    education: /\b(education|academic|qualification|degree)\b/i,
+    skills: /\b(skills|technical skills|core competencies|technologies)\b/i,
+    projects: /\b(projects|personal projects|academic projects)\b/i,
+    certifications: /\b(certifications|certificates)\b/i,
+    achievements: /\b(achievements|awards|honors)\b/i
+  };
+
+  /* ===================================================
+     NORMALIZATION
+     =================================================== */
+
+  function normalizeText(text) {
+    return String(text || "")
+      .toLowerCase()
+      .replace(/[^\w+#.\- ]+/g, " ")
+      .replace(/[_]+/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function termExists(text, term) {
+    const source = normalizeText(text);
+    const needle = normalizeText(term);
+
+    if (!source || !needle) {
+      return false;
+    }
+
+    if (needle.includes(" ")) {
+      return source.includes(needle);
+    }
+
+    const pattern = new RegExp(
+      `(^|\\s)${escapeRegExp(needle)}(?=\\s|$)`,
+      "i"
+    );
+
+    return pattern.test(source);
+  }
+
+  function escapeRegExp(value) {
+    return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  }
+
+  function titleCase(value) {
+    return String(value || "")
+      .replace(/\s+/g, " ")
+      .trim()
+      .replace(/\b\w/g, (char) => char.toUpperCase());
+  }
+
+  /* ===================================================
+     SKILL DETECTION
+     =================================================== */
+
+  function detectSkills(text) {
+    const found = [];
+
+    Object.entries(SKILL_ALIASES).forEach(([canonical, aliases]) => {
+      const match = aliases.some((alias) => termExists(text, alias));
+
+      if (match) {
+        found.push(canonical);
+      }
+    });
+
+    return found;
+  }
+
+  function getSelectedSkills() {
+    return Array.from(
+      document.querySelectorAll(
+        'input[name="skills"]:checked'
+      )
+    ).map((input) => input.value);
+  }
+
+  /* ===================================================
+     JD KEYWORD EXTRACTION
+     =================================================== */
+
+  function extractNGrams(text) {
+    const normalized = normalizeText(text);
+
+    const words = normalized
+      .split(/\s+/)
+      .map((word) => word.trim())
+      .filter(
+        (word) =>
+          word.length >= 3 &&
+          !STOP_WORDS.has(word) &&
+          !/^\d+$/.test(word)
+      );
+
+    const result = new Map();
+
+    for (let i = 0; i < words.length; i++) {
+      const one = words[i];
+
+      result.set(one, (result.get(one) || 0) + 1);
+
+      if (i < words.length - 1) {
+        const two = `${words[i]} ${words[i + 1]}`;
+
+        if (
+          !STOP_WORDS.has(words[i]) &&
+          !STOP_WORDS.has(words[i + 1])
         ) {
-
-            const page =
-                await pdf.getPage(pageNumber);
-
-
-            const content =
-                await page.getTextContent();
-
-
-            const pageText =
-                content.items
-                    .map(item => item.str || "")
-                    .join(" ");
-
-
-            completeText +=
-                `\n${pageText}`;
-
+          result.set(two, (result.get(two) || 0) + 1);
         }
+      }
 
+      if (i < words.length - 2) {
+        const three =
+          `${words[i]} ${words[i + 1]} ${words[i + 2]}`;
 
-        return completeText.trim();
-
-    }
-
-
-    /* =================================================
-       PDF OCR FALLBACK
-    ================================================= */
-
-    async function extractPDFWithOCR(file) {
-
-        const pdfjs =
-            await loadPDFJS();
-
-        const Tesseract =
-            await loadTesseract();
-
-
-        const buffer =
-            await file.arrayBuffer();
-
-
-        const pdf =
-            await pdfjs
-                .getDocument({
-                    data: buffer
-                })
-                .promise;
-
-
-        let completeText = "";
-
-
-        const maxPages =
-            Math.min(
-                pdf.numPages,
-                5
-            );
-
-
-        for (
-            let pageNumber = 1;
-            pageNumber <= maxPages;
-            pageNumber++
+        if (
+          !STOP_WORDS.has(words[i]) &&
+          !STOP_WORDS.has(words[i + 1]) &&
+          !STOP_WORDS.has(words[i + 2])
         ) {
-
-            const page =
-                await pdf.getPage(pageNumber);
-
-
-            const viewport =
-                page.getViewport({
-                    scale: 1.8
-                });
-
-
-            const canvas =
-                document.createElement("canvas");
-
-
-            canvas.width =
-                Math.ceil(viewport.width);
-
-            canvas.height =
-                Math.ceil(viewport.height);
-
-
-            const context =
-                canvas.getContext("2d");
-
-
-            await page.render({
-                canvasContext: context,
-                viewport
-            }).promise;
-
-
-            const result =
-                await Tesseract.recognize(
-                    canvas,
-                    "eng",
-                    {
-                        logger: info => {
-
-                            if (
-                                info.status === "recognizing text" &&
-                                info.progress
-                            ) {
-
-                                const pageProgress =
-                                    (
-                                        (pageNumber - 1) +
-                                        info.progress
-                                    ) /
-                                    maxPages;
-
-                                setProgress(
-                                    20 +
-                                    pageProgress * 25
-                                );
-
-                            }
-
-                        }
-                    }
-                );
-
-
-            completeText +=
-                `\n${result.data.text}`;
-
+          result.set(
+            three,
+            (result.get(three) || 0) + 1
+          );
         }
-
-
-        return completeText.trim();
-
+      }
     }
 
+    return Array.from(result.entries())
+      .filter(([, count]) => count >= 1)
+      .sort((a, b) => {
+        if (b[1] !== a[1]) {
+          return b[1] - a[1];
+        }
 
-    /* =================================================
-       DOCX TEXT EXTRACTION
-    ================================================= */
+        return b[0].length - a[0].length;
+      })
+      .map(([term]) => term)
+      .slice(0, 80);
+  }
 
-    async function extractDOCXText(file) {
+  function getHighSignalKeywords(jdText) {
+    const skillTerms = detectSkills(jdText);
 
-        const mammoth =
-            await loadMammoth();
+    const ngrams = extractNGrams(jdText);
 
+    const useful = [];
 
-        const buffer =
-            await file.arrayBuffer();
+    skillTerms.forEach((skill) => {
+      useful.push(skill);
+    });
 
+    ngrams.forEach((term) => {
+      if (
+        term.length >= 4 &&
+        !useful.some(
+          (item) =>
+            normalizeText(item) === normalizeText(term)
+        )
+      ) {
+        useful.push(titleCase(term));
+      }
+    });
 
-        const result =
-            await mammoth.extractRawText({
-                arrayBuffer: buffer
-            });
+    return uniqueStrings(useful).slice(0, 45);
+  }
 
+  function uniqueStrings(items) {
+    const map = new Map();
 
-        return (
-            result.value ||
-            ""
-        ).trim();
+    items.forEach((item) => {
+      const value = String(item || "").trim();
 
+      if (!value) {
+        return;
+      }
+
+      const key = normalizeText(value);
+
+      if (!map.has(key)) {
+        map.set(key, value);
+      }
+    });
+
+    return Array.from(map.values());
+  }
+
+  /* ===================================================
+     YEARS / EXPERIENCE
+     =================================================== */
+
+  function extractYears(text) {
+    const matches = [];
+    const regex =
+      /(\d+(?:\.\d+)?)\s*\+?\s*(?:years?|yrs?)/gi;
+
+    let match;
+
+    while ((match = regex.exec(String(text || ""))) !== null) {
+      const value = Number(match[1]);
+
+      if (Number.isFinite(value)) {
+        matches.push(value);
+      }
     }
 
+    return matches;
+  }
 
-    /* =================================================
-       RESUME EXTRACTION
-    ================================================= */
+  function getMaxYears(text) {
+    const years = extractYears(text);
 
-    async function extractResumeText(file) {
-
-        const extension =
-            getExtension(file.name);
-
-
-        if (extension === "pdf") {
-
-            let text =
-                await extractPDFText(file);
-
-
-            if (countWords(text) < 25) {
-
-                if (pdfMessage) {
-                    pdfMessage.textContent =
-                        "PDF appears image-based. Running OCR...";
-                }
-
-                text =
-                    await extractPDFWithOCR(file);
-
-            }
-
-
-            return text;
-
-        }
-
-
-        if (extension === "docx") {
-
-            return extractDOCXText(file);
-
-        }
-
-
-        if (extension === "doc") {
-
-            throw new Error(
-                "Legacy .doc format is not supported. Please upload PDF or DOCX."
-            );
-
-        }
-
-
-        throw new Error(
-            "Unsupported resume format."
-        );
-
+    if (!years.length) {
+      return 0;
     }
 
+    return Math.max(...years);
+  }
 
-    /* =================================================
-       SKILL DATABASE
-    ================================================= */
+  function getResumeExperienceYears(experienceLevel, resumeText) {
+    const level = String(experienceLevel || "").toLowerCase();
 
-    const SKILL_DATABASE = {
+    if (level.includes("fresher")) {
+      return 0;
+    }
 
-        "javascript": [
-            "javascript",
-            "js"
-        ],
+    const selected = getRangeUpperBound(level);
 
-        "typescript": [
-            "typescript",
-            "ts"
-        ],
+    const extracted = getMaxYears(resumeText);
 
-        "react": [
-            "react",
-            "reactjs",
-            "react.js"
-        ],
+    if (extracted > 0) {
+      return Math.max(extracted, selected);
+    }
 
-        "node.js": [
-            "node.js",
-            "nodejs",
-            "node"
-        ],
+    return selected;
+  }
 
-        "express.js": [
-            "express.js",
-            "expressjs",
-            "express"
-        ],
+  function getRangeUpperBound(value) {
+    const text = String(value || "").toLowerCase();
 
-        "mongodb": [
-            "mongodb",
-            "mongo db",
-            "mongo"
-        ],
+    if (text.includes("10+")) {
+      return 10;
+    }
 
-        "mysql": [
-            "mysql"
-        ],
+    const match = text.match(
+      /(\d+(?:\.\d+)?)\s*-\s*(\d+(?:\.\d+)?)/ 
+    );
 
-        "postgresql": [
-            "postgresql",
-            "postgres",
-            "postgres sql"
-        ],
+    if (match) {
+      return Number(match[2]);
+    }
 
-        "sql": [
-            "sql"
-        ],
+    const single = text.match(
+      /(\d+(?:\.\d+)?)/
+    );
 
-        "nosql": [
-            "nosql",
-            "no sql"
-        ],
+    return single ? Number(single[1]) : 0;
+  }
 
-        "python": [
-            "python"
-        ],
+  /* ===================================================
+     ROLE SIGNALS
+     =================================================== */
 
-        "java": [
-            "java"
-        ],
+  function inferJobTitle(jdText) {
+    const lines = String(jdText || "")
+      .split(/\n+/)
+      .map((line) => line.trim())
+      .filter(Boolean);
 
-        "c++": [
-            "c++",
-            "c plus plus"
-        ],
-
-        "c#": [
-            "c#",
-            "c sharp"
-        ],
-
-        "html": [
-            "html",
-            "html5"
-        ],
-
-        "css": [
-            "css",
-            "css3"
-        ],
-
-        "spring boot": [
-            "spring boot",
-            "springboot"
-        ],
-
-        "spring": [
-            "spring framework",
-            "spring"
-        ],
-
-        "git": [
-            "git"
-        ],
-
-        "github": [
-            "github",
-            "git hub"
-        ],
-
-        "docker": [
-            "docker"
-        ],
-
-        "kubernetes": [
-            "kubernetes",
-            "k8s"
-        ],
-
-        "aws": [
-            "aws",
-            "amazon web services"
-        ],
-
-        "azure": [
-            "azure",
-            "microsoft azure"
-        ],
-
-        "gcp": [
-            "gcp",
-            "google cloud",
-            "google cloud platform"
-        ],
-
-        "machine learning": [
-            "machine learning",
-            "ml"
-        ],
-
-        "artificial intelligence": [
-            "artificial intelligence",
-            "ai"
-        ],
-
-        "deep learning": [
-            "deep learning"
-        ],
-
-        "data science": [
-            "data science"
-        ],
-
-        "data analysis": [
-            "data analysis",
-            "data analytics"
-        ],
-
-        "rest api": [
-            "rest api",
-            "restful api",
-            "rest"
-        ],
-
-        "graphql": [
-            "graphql"
-        ],
-
-        "api": [
-            "api",
-            "apis"
-        ],
-
-        "tailwind": [
-            "tailwind",
-            "tailwind css"
-        ],
-
-        "bootstrap": [
-            "bootstrap"
-        ],
-
-        "next.js": [
-            "next.js",
-            "nextjs"
-        ],
-
-        "angular": [
-            "angular"
-        ],
-
-        "vue": [
-            "vue",
-            "vue.js",
-            "vuejs"
-        ],
-
-        "figma": [
-            "figma"
-        ],
-
-        "firebase": [
-            "firebase"
-        ],
-
-        "linux": [
-            "linux"
-        ],
-
-        "jira": [
-            "jira"
-        ],
-
-        "agile": [
-            "agile"
-        ],
-
-        "scrum": [
-            "scrum"
-        ],
-
-        "jenkins": [
-            "jenkins"
-        ],
-
-        "ci/cd": [
-            "ci/cd",
-            "ci cd",
-            "continuous integration",
-            "continuous deployment"
-        ]
-
-    };
-
-
-    /* =================================================
-       ROLE DATABASE
-    ================================================= */
-
-    const ROLE_TERMS = {
-
-        "frontend developer": [
-            "frontend developer",
-            "front end developer",
-            "frontend engineer",
-            "front end engineer",
-            "ui developer",
-            "web developer"
-        ],
-
-        "backend developer": [
-            "backend developer",
-            "back end developer",
-            "backend engineer",
-            "back end engineer"
-        ],
-
-        "full stack developer": [
-            "full stack developer",
-            "fullstack developer",
-            "full stack engineer",
-            "fullstack engineer"
-        ],
-
-        "software engineer": [
-            "software engineer",
-            "software developer",
-            "software development engineer",
-            "sde"
-        ],
-
-        "data analyst": [
-            "data analyst",
-            "data analytics",
-            "business analyst"
-        ],
-
-        "data scientist": [
-            "data scientist",
-            "data science"
-        ],
-
-        "machine learning engineer": [
-            "machine learning engineer",
-            "ml engineer",
-            "machine learning developer"
-        ],
-
-        "devops engineer": [
-            "devops engineer",
-            "devops developer",
-            "site reliability engineer",
-            "sre"
-        ],
-
-        "cloud engineer": [
-            "cloud engineer",
-            "cloud developer",
-            "cloud architect"
-        ],
-
-        "java developer": [
-            "java developer",
-            "java engineer",
-            "java software engineer"
-        ],
-
-        "python developer": [
-            "python developer",
-            "python engineer"
-        ],
-
-        "react developer": [
-            "react developer",
-            "react engineer",
-            "react.js developer"
-        ]
-
-    };
-
-
-    /* =================================================
-       IMPORTANT ATS TERMS
-    ================================================= */
-
-    const HIGH_SIGNAL_TERMS = [
-
-        "problem solving",
-        "communication",
-        "teamwork",
-        "leadership",
-        "analytical skills",
-        "time management",
-        "project management",
-        "testing",
-        "debugging",
-        "performance",
-        "scalable",
-        "scalability",
-        "optimization",
-        "deployment",
-        "database",
-        "security",
-        "automation",
-        "integration",
-        "development",
-        "software development",
-        "web development",
-        "version control",
-        "object oriented programming",
-        "oop",
-        "unit testing",
-        "code review",
-        "documentation",
-        "requirements",
-        "architecture"
+    const rolePatterns = [
+      /(?:job title|position|role|designation)\s*[:\-]\s*(.+)/i,
+      /(?:hiring|looking for|seeking)\s+(?:a|an)?\s*([a-z0-9 .&/-]{3,60})/i
     ];
 
-
-    /* =================================================
-       EXTRACT TERMS FROM JD
-    ================================================= */
-
-    function extractJDTerms(jdText) {
-
-        const found = [];
-
-
-        /* Skills */
-
-        Object.entries(
-            SKILL_DATABASE
-        ).forEach(([canonical, aliases]) => {
-
-            if (
-                aliases.some(
-                    alias =>
-                        containsTerm(
-                            jdText,
-                            alias
-                        )
-                )
-            ) {
-
-                found.push({
-                    term: canonical,
-                    type: "skill"
-                });
-
-            }
-
-        });
-
-
-        /* Roles */
-
-        Object.entries(
-            ROLE_TERMS
-        ).forEach(([canonical, aliases]) => {
-
-            if (
-                aliases.some(
-                    alias =>
-                        containsTerm(
-                            jdText,
-                            alias
-                        )
-                )
-            ) {
-
-                found.push({
-                    term: canonical,
-                    type: "role"
-                });
-
-            }
-
-        });
-
-
-        /* High signal terms */
-
-        HIGH_SIGNAL_TERMS.forEach(term => {
-
-            if (
-                containsTerm(
-                    jdText,
-                    term
-                )
-            ) {
-
-                found.push({
-                    term,
-                    type: "general"
-                });
-
-            }
-
-        });
-
-
-        return uniqueObjects(found);
-
-    }
-
-
-    function uniqueObjects(items) {
-
-        const seen = new Set();
-
-        return items.filter(item => {
-
-            const key =
-                `${item.type}:${item.term}`;
-
-            if (seen.has(key)) {
-                return false;
-            }
-
-            seen.add(key);
-
-            return true;
-
-        });
-
-    }
-
-
-    /* =================================================
-       RESUME KEYWORD MATCH
-    ================================================= */
-
-    function compareKeywords(
-        resumeText,
-        jdTerms
-    ) {
-
-        const matched = [];
-        const missing = [];
-
-
-        jdTerms.forEach(item => {
-
-            if (
-                containsTerm(
-                    resumeText,
-                    item.term
-                )
-            ) {
-
-                matched.push(item);
-
-            } else {
-
-                missing.push(item);
-
-            }
-
-        });
-
-
-        const total =
-            jdTerms.length;
-
-
-        const keywordPercentage =
-            total === 0
-                ? 0
-                : Math.round(
-                    (
-                        matched.length /
-                        total
-                    ) * 100
-                );
-
-
-        return {
-            matched,
-            missing,
-            percentage:
-                clamp(
-                    keywordPercentage,
-                    0,
-                    100
-                )
-        };
-
-    }
-
-
-    /* =================================================
-       SELECTED SKILLS
-    ================================================= */
-
-    function getSelectedSkills() {
-
-        return [
-            ...document.querySelectorAll(
-                'input[name="skills"]:checked'
-            )
-        ].map(
-            input => input.value
-        );
-
-    }
-
-
-    function calculateSkillMatch(
-        resumeText,
-        jdText,
-        selectedSkills
-    ) {
-
-        const requiredSkills = [];
-
-
-        Object.entries(
-            SKILL_DATABASE
-        ).forEach(([canonical, aliases]) => {
-
-            if (
-                aliases.some(
-                    alias =>
-                        containsTerm(
-                            jdText,
-                            alias
-                        )
-                )
-            ) {
-
-                requiredSkills.push(
-                    canonical
-                );
-
-            }
-
-        });
-
-
-        if (requiredSkills.length === 0) {
-
-            return {
-                score: 100,
-                required: [],
-                matched: [],
-                missing: []
-            };
-
+    for (const line of lines.slice(0, 20)) {
+      for (const pattern of rolePatterns) {
+        const match = line.match(pattern);
+
+        if (match && match[1]) {
+          return titleCase(
+            match[1]
+              .replace(
+                /\b(?:developer|engineer|analyst|designer|manager|intern)\b.*$/i,
+                (value) => value
+              )
+              .trim()
+          );
         }
-
-
-        const matched = [];
-        const missing = [];
-
-
-        requiredSkills.forEach(skill => {
-
-            const resumeHasSkill =
-                SKILL_DATABASE[skill].some(
-                    alias =>
-                        containsTerm(
-                            resumeText,
-                            alias
-                        )
-                );
-
-
-            const selectedHasSkill =
-                selectedSkills.some(
-                    selected =>
-                        cleanForMatching(
-                            selected
-                        ) ===
-                        cleanForMatching(
-                            skill
-                        )
-                );
-
-
-            if (
-                resumeHasSkill ||
-                selectedHasSkill
-            ) {
-
-                matched.push(skill);
-
-            } else {
-
-                missing.push(skill);
-
-            }
-
-        });
-
-
-        return {
-            score:
-                Math.round(
-                    (
-                        matched.length /
-                        requiredSkills.length
-                    ) * 100
-                ),
-            required: requiredSkills,
-            matched,
-            missing
-        };
-
+      }
     }
 
+    const commonRoles = [
+      "Frontend Developer",
+      "React Developer",
+      "Backend Developer",
+      "Full Stack Developer",
+      "Software Engineer",
+      "Python Developer",
+      "Java Developer",
+      "Data Analyst",
+      "ML Engineer",
+      "DevOps Engineer",
+      "Product Manager",
+      "UI UX Designer",
+      "QA Engineer"
+    ];
 
-    /* =================================================
-       EXPERIENCE MATCH
-    ================================================= */
+    const found = commonRoles.find((role) =>
+      termExists(jdText, role)
+    );
 
-    function extractRequiredYears(jdText) {
+    return found || "Target Role";
+  }
 
-        const text =
-            cleanForMatching(jdText);
+  function getRoleSignals(jdText) {
+    const normalized = normalizeText(jdText);
 
+    const roles = [
+      "frontend developer",
+      "react developer",
+      "backend developer",
+      "full stack developer",
+      "software engineer",
+      "python developer",
+      "java developer",
+      "data analyst",
+      "ml engineer",
+      "devops engineer",
+      "qa engineer",
+      "ui ux designer",
+      "product manager"
+    ];
 
-        const patterns = [
+    return roles.filter((role) =>
+      normalized.includes(role)
+    );
+  }
 
-            /(\d+)\s*\+\s*(?:years?|yrs?)/i,
+  /* ===================================================
+     REQUIRED / PREFERRED JD PARSING
+     =================================================== */
 
-            /minimum\s+of\s+(\d+)\s*(?:years?|yrs?)/i,
+  const REQUIRED_MARKERS = [
+    "required",
+    "requirements",
+    "must have",
+    "must-have",
+    "must",
+    "mandatory",
+    "essential",
+    "minimum",
+    "need to",
+    "should have",
+    "you have",
+    "you should",
+    "strong experience"
+  ];
 
-            /at\s+least\s+(\d+)\s*(?:years?|yrs?)/i,
+  const PREFERRED_MARKERS = [
+    "preferred",
+    "nice to have",
+    "nice-to-have",
+    "good to have",
+    "plus",
+    "bonus",
+    "desired",
+    "optional",
+    "advantage",
+    "preferred qualifications"
+  ];
 
-            /(\d+)\s*(?:to|-)\s*(\d+)\s*(?:years?|yrs?)/i
+  function containsAny(text, markers) {
+    const normalized = normalizeText(text);
 
-        ];
+    return markers.some((marker) =>
+      normalized.includes(normalizeText(marker))
+    );
+  }
 
+  function splitJdSentences(jdText) {
+    return String(jdText || "")
+      .split(/\n+|(?<=[.!?])\s+/)
+      .map((line) => line.trim())
+      .filter(Boolean);
+  }
 
-        for (const pattern of patterns) {
+  function parseRequirementSections(jdText) {
+    const lines = splitJdSentences(jdText);
 
-            const match =
-                text.match(pattern);
+    const requiredText = [];
+    const preferredText = [];
+    const neutralText = [];
 
+    lines.forEach((line) => {
+      const isPreferred = containsAny(
+        line,
+        PREFERRED_MARKERS
+      );
 
-            if (match) {
+      const isRequired = containsAny(
+        line,
+        REQUIRED_MARKERS
+      );
 
-                return Number(match[1]);
+      if (isPreferred) {
+        preferredText.push(line);
+      } else if (isRequired) {
+        requiredText.push(line);
+      } else {
+        neutralText.push(line);
+      }
+    });
 
-            }
+    return {
+      requiredText: requiredText.join("\n"),
+      preferredText: preferredText.join("\n"),
+      neutralText: neutralText.join("\n")
+    };
+  }
 
-        }
+  function extractRequirementTerms(jdText, type) {
+    const sections = parseRequirementSections(jdText);
 
+    let source = "";
 
-        return 0;
-
+    if (type === "required") {
+      source = sections.requiredText;
+    } else if (type === "preferred") {
+      source = sections.preferredText;
+    } else {
+      source = sections.neutralText;
     }
 
+    const skills = detectSkills(source);
 
-    function experienceYears(value) {
+    const highSignal = getHighSignalKeywords(source);
 
-        switch (value) {
+    return uniqueStrings([
+      ...skills,
+      ...highSignal
+    ]).slice(0, 30);
+  }
 
-            case "fresher":
-                return 0;
+  /* ===================================================
+     REQUIREMENT CLASSIFICATION
+     =================================================== */
 
-            case "0-1":
-                return 1;
+  function classifyKeywords(jdText, resumeText) {
+    const required = extractRequirementTerms(
+      jdText,
+      "required"
+    );
 
-            case "1-3":
-                return 2;
+    const preferred = extractRequirementTerms(
+      jdText,
+      "preferred"
+    );
 
-            case "3-5":
-                return 4;
+    const allSkills = detectSkills(jdText);
 
-            case "5-8":
-                return 6;
+    const requiredSet = new Set(
+      required.map(normalizeText)
+    );
 
-            case "8+":
-                return 9;
+    const preferredSet = new Set(
+      preferred.map(normalizeText)
+    );
 
-            default:
-                return 0;
+    const neutralSkills = allSkills.filter((skill) => {
+      const key = normalizeText(skill);
 
-        }
+      return (
+        !requiredSet.has(key) &&
+        !preferredSet.has(key)
+      );
+    });
 
+    const inferredRequired = [
+      ...required,
+      ...neutralSkills
+    ];
+
+    const finalRequired = uniqueStrings(
+      inferredRequired
+    ).slice(0, 30);
+
+    const finalPreferred = uniqueStrings(
+      preferred
+    )
+      .filter(
+        (item) =>
+          !finalRequired.some(
+            (req) =>
+              normalizeText(req) === normalizeText(item)
+          )
+      )
+      .slice(0, 25);
+
+    const matchedRequired = finalRequired.filter(
+      (term) => termExists(resumeText, term)
+    );
+
+    const missingRequired = finalRequired.filter(
+      (term) => !termExists(resumeText, term)
+    );
+
+    const matchedPreferred = finalPreferred.filter(
+      (term) => termExists(resumeText, term)
+    );
+
+    const missingPreferred = finalPreferred.filter(
+      (term) => !termExists(resumeText, term)
+    );
+
+    return {
+      required: finalRequired,
+      preferred: finalPreferred,
+      matchedRequired,
+      missingRequired,
+      matchedPreferred,
+      missingPreferred
+    };
+  }
+
+  /* ===================================================
+     KEYWORD MATCH SCORE
+     =================================================== */
+
+  function calculateKeywordMatch(jdText, resumeText) {
+    const jdKeywords = getHighSignalKeywords(jdText);
+
+    const matched = jdKeywords.filter((term) =>
+      termExists(resumeText, term)
+    );
+
+    const missing = jdKeywords.filter(
+      (term) => !termExists(resumeText, term)
+    );
+
+    const scoreValue = jdKeywords.length
+      ? Math.round(
+          (matched.length / jdKeywords.length) * 100
+        )
+      : 0;
+
+    return {
+      score: scoreValue,
+      matched,
+      missing,
+      jdKeywords,
+      resumeSkills: detectSkills(resumeText),
+      jdSkills: detectSkills(jdText)
+    };
+  }
+
+  /* ===================================================
+     SKILLS SCORE
+     =================================================== */
+
+  function calculateSkillsScore(
+    jdText,
+    resumeText,
+    selectedSkills
+  ) {
+    const jdSkills = detectSkills(jdText);
+    const resumeSkills = detectSkills(resumeText);
+
+    const selected = uniqueStrings([
+      ...selectedSkills
+    ]);
+
+    const effectiveResumeSkills = uniqueStrings([
+      ...resumeSkills,
+      ...selected
+    ]);
+
+    if (!jdSkills.length) {
+      return {
+        score: 60,
+        matched: [],
+        missing: [],
+        jdSkills,
+        resumeSkills: effectiveResumeSkills
+      };
     }
 
+    const matched = jdSkills.filter((skill) =>
+      effectiveResumeSkills.some(
+        (resumeSkill) =>
+          normalizeText(resumeSkill) ===
+          normalizeText(skill)
+      )
+    );
 
-    function calculateExperienceScore(
-        resumeText,
-        jdText,
-        selectedExperience,
-        careerGoalValue
-    ) {
+    const missing = jdSkills.filter(
+      (skill) =>
+        !matched.some(
+          (match) =>
+            normalizeText(match) === normalizeText(skill)
+        )
+    );
 
-        const requiredYears =
-            extractRequiredYears(
-                jdText
-            );
+    const scoreValue = Math.round(
+      (matched.length / jdSkills.length) * 100
+    );
 
+    return {
+      score: scoreValue,
+      matched,
+      missing,
+      jdSkills,
+      resumeSkills: effectiveResumeSkills
+    };
+  }
 
-        const candidateYears =
-            experienceYears(
-                selectedExperience
-            );
+  /* ===================================================
+     EXPERIENCE SCORE
+     =================================================== */
 
+  function calculateExperience(
+    jdText,
+    experienceLevel,
+    resumeText
+  ) {
+    const requiredYears = getMaxYears(jdText);
 
-        let yearScore = 100;
+    const resumeYears = getResumeExperienceYears(
+      experienceLevel,
+      resumeText
+    );
 
-
-        if (requiredYears > 0) {
-
-            if (
-                candidateYears >=
-                requiredYears
-            ) {
-
-                yearScore = 100;
-
-            } else {
-
-                const gap =
-                    requiredYears -
-                    candidateYears;
-
-                yearScore =
-                    clamp(
-                        100 -
-                        gap * 20,
-                        20,
-                        100
-                    );
-
-            }
-
-        }
-
-
-        const roleMatches =
-            Object.entries(
-                ROLE_TERMS
-            ).filter(
-                ([, aliases]) =>
-                    aliases.some(
-                        alias =>
-                            containsTerm(
-                                jdText,
-                                alias
-                            )
-                    )
-            );
-
-
-        let roleScore = 100;
-
-
-        if (roleMatches.length > 0) {
-
-            const hasRelevantRole =
-                roleMatches.some(
-                    ([, aliases]) =>
-                        aliases.some(
-                            alias =>
-                                containsTerm(
-                                    resumeText,
-                                    alias
-                                ) ||
-                                containsTerm(
-                                    careerGoalValue,
-                                    alias
-                                )
-                        )
-                );
-
-
-            roleScore =
-                hasRelevantRole
-                    ? 100
-                    : 45;
-
-        }
-
-
-        return Math.round(
-            (
-                yearScore * 0.55 +
-                roleScore * 0.45
-            )
-        );
-
+    if (requiredYears <= 0) {
+      return {
+        score: 75,
+        requiredYears: 0,
+        resumeYears,
+        gap: 0,
+        status: "No explicit minimum found"
+      };
     }
 
+    const gap = Math.max(
+      requiredYears - resumeYears,
+      0
+    );
 
-    /* =================================================
-       ATS COMPATIBILITY
-    ================================================= */
+    let scoreValue = 100;
 
-    function calculateATSCompatibility(
+    if (resumeYears < requiredYears) {
+      scoreValue = Math.max(
+        30,
+        Math.round(
+          (resumeYears / requiredYears) * 100
+        )
+      );
+    }
+
+    return {
+      score: scoreValue,
+      requiredYears,
+      resumeYears,
+      gap,
+      status:
+        gap === 0
+          ? "Meets stated experience"
+          : "Experience gap detected"
+    };
+  }
+
+  /* ===================================================
+     ATS COMPATIBILITY
+     =================================================== */
+
+  function calculateATSCompatibility(resumeText) {
+    const text = String(resumeText || "");
+
+    let scoreValue = 45;
+
+    const email = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i;
+    const phone =
+      /(?:\+?\d[\d\s().-]{8,}\d)/;
+
+    if (email.test(text)) {
+      scoreValue += 8;
+    }
+
+    if (phone.test(text)) {
+      scoreValue += 7;
+    }
+
+    if (SECTION_PATTERNS.experience.test(text)) {
+      scoreValue += 8;
+    }
+
+    if (SECTION_PATTERNS.education.test(text)) {
+      scoreValue += 7;
+    }
+
+    if (SECTION_PATTERNS.skills.test(text)) {
+      scoreValue += 8;
+    }
+
+    if (SECTION_PATTERNS.projects.test(text)) {
+      scoreValue += 5;
+    }
+
+    return Math.min(scoreValue, 100);
+  }
+
+  /* ===================================================
+     RESUME QUALITY
+     =================================================== */
+
+  function calculateResumeQuality(resumeText) {
+    const text = String(resumeText || "");
+
+    const words = text
+      .split(/\s+/)
+      .filter(Boolean);
+
+    let scoreValue = 45;
+
+    if (words.length >= 150) {
+      scoreValue += 15;
+    }
+
+    if (words.length >= 300) {
+      scoreValue += 10;
+    }
+
+    if (words.length >= 500) {
+      scoreValue += 5;
+    }
+
+    const actionVerbCount =
+      ACTION_VERBS.filter((verb) =>
+        termExists(text, verb)
+      ).length;
+
+    scoreValue += Math.min(
+      actionVerbCount * 2,
+      15
+    );
+
+    const bulletLikeLines = text
+      .split("\n")
+      .filter((line) =>
+        /^[•\-*▪]/.test(line.trim())
+      ).length;
+
+    scoreValue += Math.min(
+      bulletLikeLines,
+      10
+    );
+
+    return Math.min(scoreValue, 100);
+  }
+
+  /* ===================================================
+     EDUCATION
+     =================================================== */
+
+  function calculateEducationScore(resumeText) {
+    if (SECTION_PATTERNS.education.test(resumeText)) {
+      return 100;
+    }
+
+    if (
+      /\b(bachelor|master|b\.?tech|m\.?tech|bca|mca|bsc|msc|degree|diploma)\b/i.test(
         resumeText
+      )
     ) {
-
-        const text =
-            cleanForMatching(
-                resumeText
-            );
-
-
-        if (!text) {
-            return 0;
-        }
-
-
-        let points = 0;
-
-
-        const sections = {
-
-            contact:
-                /@/.test(text) ||
-                /\b(?:phone|mobile|contact)\b/.test(text),
-
-            summary:
-                /\b(?:summary|profile|objective|about me)\b/.test(text),
-
-            experience:
-                /\b(?:experience|work history|employment)\b/.test(text),
-
-            education:
-                /\b(?:education|academic|qualification)\b/.test(text),
-
-            skills:
-                /\b(?:skills|technical skills|technologies)\b/.test(text),
-
-            projects:
-                /\b(?:projects|personal projects|academic projects)\b/.test(text)
-
-        };
-
-
-        Object.values(sections)
-            .forEach(present => {
-
-                if (present) {
-                    points += 10;
-                }
-
-            });
-
-
-        const words =
-            countWords(text);
-
-
-        if (words >= 150 && words <= 1500) {
-            points += 15;
-        } else if (words >= 100) {
-            points += 8;
-        }
-
-
-        if (
-            /\b(?:linkedin|github)\b/i.test(
-                text
-            )
-        ) {
-
-            points += 10;
-
-        }
-
-
-        if (
-            /\b\d{4}\b/.test(text)
-        ) {
-
-            points += 5;
-
-        }
-
-
-        return clamp(
-            points,
-            0,
-            100
-        );
-
+      return 85;
     }
 
+    return 55;
+  }
 
-    /* =================================================
-       RESUME QUALITY
-    ================================================= */
+  /* ===================================================
+     JOB MATCH
+     =================================================== */
 
-    function calculateResumeQuality(
+  function calculateJobMatch(
+    keywordScore,
+    experienceScore,
+    requiredMissing,
+    requiredTotal
+  ) {
+    const requiredRatio = requiredTotal
+      ? Math.max(
+          0,
+          (requiredTotal - requiredMissing) /
+            requiredTotal
+        )
+      : keywordScore / 100;
+
+    const requiredScore =
+      requiredRatio * 100;
+
+    return Math.round(
+      requiredScore * 0.65 +
+      keywordScore * 0.20 +
+      experienceScore * 0.15
+    );
+  }
+
+  /* ===================================================
+     EXPERIENCE GAP DETAILS
+     =================================================== */
+
+  function buildExperienceGap(experience) {
+    if (experience.requiredYears <= 0) {
+      return {
+        ...experience,
+        message:
+          "The JD does not state a clear minimum experience requirement."
+      };
+    }
+
+    if (experience.gap <= 0) {
+      return {
+        ...experience,
+        message:
+          `Your estimated experience meets the stated ${experience.requiredYears}+ year requirement.`
+      };
+    }
+
+    return {
+      ...experience,
+      message:
+        `The JD asks for ${formatYears(experience.requiredYears)} while your analysis indicates about ${formatYears(experience.resumeYears)}.`
+    };
+  }
+
+  function formatYears(value) {
+    if (Number.isInteger(value)) {
+      return `${value} year${value === 1 ? "" : "s"}`;
+    }
+
+    return `${value.toFixed(1)} years`;
+  }
+
+  /* ===================================================
+     IMPROVEMENT POTENTIAL
+     =================================================== */
+
+  function calculateImprovementPotential(
+    report
+  ) {
+    const missingRequiredCount =
+      report.requirements.missingRequired.length;
+
+    const requiredTotal =
+      report.requirements.required.length;
+
+    const missingRatio =
+      requiredTotal > 0
+        ? missingRequiredCount / requiredTotal
+        : 0;
+
+    let potential = 0;
+
+    potential += Math.round(
+      Math.min(missingRatio * 20, 20)
+    );
+
+    if (report.ats < 75) {
+      potential += 4;
+    }
+
+    if (report.quality < 75) {
+      potential += 3;
+    }
+
+    if (report.experience.gap > 0) {
+      potential += 2;
+    }
+
+    potential = Math.min(
+      Math.max(potential, 0),
+      25
+    );
+
+    let note =
+      "Your current report is already relatively aligned.";
+
+    if (potential >= 15) {
+      note =
+        "There is meaningful optimization potential, mainly from high-priority JD terms and ATS structure.";
+    } else if (potential >= 8) {
+      note =
+        "Several targeted changes could improve alignment with this JD.";
+    }
+
+    return {
+      points: potential,
+      note
+    };
+  }
+
+  /* ===================================================
+     SKILL PRIORITY
+     =================================================== */
+
+  function calculateSkillPriority(
+    requirements,
+    jdText,
+    resumeText
+  ) {
+    const required = requirements.required.map(
+      (term) => ({
+        term,
+        type: "Required",
+        weight: 3
+      })
+    );
+
+    const preferred = requirements.preferred.map(
+      (term) => ({
+        term,
+        type: "Preferred",
+        weight: 2
+      })
+    );
+
+    const all = [...required, ...preferred];
+
+    const frequencyText = normalizeText(jdText);
+
+    all.forEach((item) => {
+      const normalizedTerm =
+        normalizeText(item.term);
+
+      let frequency = 0;
+      let index = frequencyText.indexOf(
+        normalizedTerm
+      );
+
+      while (index !== -1) {
+        frequency++;
+        index = frequencyText.indexOf(
+          normalizedTerm,
+          index + normalizedTerm.length
+        );
+      }
+
+      item.score =
+        item.weight * 10 +
+        Math.min(frequency * 4, 20);
+
+      if (termExists(resumeText, item.term)) {
+        item.score += 8;
+      }
+    });
+
+    return all
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 12);
+  }
+
+  /* ===================================================
+     RECOMMENDATIONS
+     =================================================== */
+
+  function generateSuggestions(report) {
+    const suggestions = [];
+
+    const critical =
+      report.criticalMissingSkills;
+
+    if (critical.length) {
+      suggestions.push(
+        `Prioritize the critical required skills: ${critical.slice(0, 5).join(", ")}. Only add a skill if you genuinely have that experience.`
+      );
+    }
+
+    if (report.requirements.missingRequired.length) {
+      suggestions.push(
+        "Review the required JD terms and naturally incorporate supported keywords into your Skills, Experience or Projects sections."
+      );
+    }
+
+    if (
+      report.requirements.matchedRequired.length &&
+      report.keyword.score < 70
+    ) {
+      suggestions.push(
+        "Your resume has some required skills, but the overall JD wording is not aligned strongly enough. Mirror relevant terminology from the JD where it truthfully describes your work."
+      );
+    }
+
+    if (
+      report.experience.requiredYears > 0 &&
+      report.experience.gap > 0
+    ) {
+      suggestions.push(
+        `The JD states ${formatYears(report.experience.requiredYears)} of experience. Emphasize relevant projects, internships or professional work that demonstrate comparable responsibilities without overstating your years.`
+      );
+    }
+
+    if (report.ats < 75) {
+      suggestions.push(
+        "Improve ATS readability by keeping clear section headings such as Summary, Skills, Experience, Education and Projects, and avoid putting important information only inside graphics."
+      );
+    }
+
+    if (report.quality < 75) {
+      suggestions.push(
+        "Strengthen experience bullets with action verbs and measurable outcomes where available, such as performance improvements, scale, users, revenue, time saved or defect reduction."
+      );
+    }
+
+    if (
+      report.targetTitle &&
+      report.targetTitle !== "Target Role"
+    ) {
+      suggestions.push(
+        `Tailor the resume headline or summary toward the target role: ${report.targetTitle}.`
+      );
+    }
+
+    if (
+      report.targetCompany &&
+      report.targetCompany.trim()
+    ) {
+      suggestions.push(
+        `Before applying to ${report.targetCompany}, verify that the resume uses the same relevant terminology as the exact job posting.`
+      );
+    }
+
+    if (!suggestions.length) {
+      suggestions.push(
+        "Your resume is reasonably aligned with the supplied JD. Focus on concise achievements, truthful keyword usage and role-specific evidence."
+      );
+    }
+
+    return uniqueStrings(suggestions).slice(0, 8);
+  }
+
+  /* ===================================================
+     FINAL REPORT
+     =================================================== */
+
+  function calculateReport({
+    resumeText,
+    jdText,
+    experienceLevel,
+    selectedSkills,
+    targetTitle,
+    targetCompany
+  }) {
+    const keyword = calculateKeywordMatch(
+      jdText,
+      resumeText
+    );
+
+    const skills = calculateSkillsScore(
+      jdText,
+      resumeText,
+      selectedSkills
+    );
+
+    const experience = calculateExperience(
+      jdText,
+      experienceLevel,
+      resumeText
+    );
+
+    const ats = calculateATSCompatibility(
+      resumeText
+    );
+
+    const quality = calculateResumeQuality(
+      resumeText
+    );
+
+    const education =
+      calculateEducationScore(resumeText);
+
+    const requirements = classifyKeywords(
+      jdText,
+      resumeText
+    );
+
+    const criticalMissing = requirements.missingRequired
+      .filter((term) =>
+        detectSkills(term).length > 0 ||
+        term.length >= 4
+      )
+      .slice(0, 10);
+
+    const jobMatch = calculateJobMatch(
+      keyword.score,
+      experience.score,
+      requirements.missingRequired.length,
+      requirements.required.length
+    );
+
+    const inferredTitle =
+      targetTitle.trim() ||
+      inferJobTitle(jdText);
+
+    const experienceGapData =
+      buildExperienceGap(experience);
+
+    const report = {
+      final: 0,
+      keyword,
+      skills,
+      experience,
+      ats,
+      quality,
+      education,
+      jobMatch,
+      requirements,
+      criticalMissingSkills: uniqueStrings(
+        criticalMissing
+      ),
+      targetTitle: inferredTitle,
+      targetCompany: targetCompany.trim(),
+      experienceGap: experienceGapData,
+      improvementPotential: null,
+      skillPriority: [],
+      recommendations: []
+    };
+
+    /*
+      Main ATS score:
+      Keyword 35%
+      Skills 20%
+      Experience 15%
+      ATS 15%
+      Quality 5%
+      Education 10%
+    */
+
+    report.final = Math.round(
+      keyword.score * 0.35 +
+      skills.score * 0.20 +
+      experience.score * 0.15 +
+      ats * 0.15 +
+      quality * 0.05 +
+      education * 0.10
+    );
+
+    report.improvementPotential =
+      calculateImprovementPotential(report);
+
+    report.skillPriority =
+      calculateSkillPriority(
+        requirements,
+        jdText,
         resumeText
-    ) {
+      );
 
-        const text =
-            cleanForMatching(
-                resumeText
-            );
+    report.recommendations =
+      generateSuggestions(report);
 
+    return report;
+  }
 
-        const words =
-            countWords(text);
+  /* ===================================================
+     STRENGTH LABEL
+     =================================================== */
 
+  function getStrength(scoreValue) {
+    if (scoreValue >= 85) {
+      return {
+        label: "Excellent",
+        color: "#2e9b50"
+      };
+    }
 
-        let points = 0;
+    if (scoreValue >= 75) {
+      return {
+        label: "Strong",
+        color: "#42a85f"
+      };
+    }
 
+    if (scoreValue >= 60) {
+      return {
+        label: "Needs Improvement",
+        color: "#c88a27"
+      };
+    }
 
-        if (
-            words >= 250 &&
-            words <= 900
-        ) {
+    return {
+      label: "Needs Major Improvement",
+      color: "#c44459"
+    };
+  }
 
-            points += 25;
+  /* ===================================================
+     HTML ESCAPE
+     =================================================== */
 
-        } else if (
-            words >= 150 &&
-            words <= 1200
-        ) {
+  function escapeHtml(value) {
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
 
-            points += 18;
+  /* ===================================================
+     CHIP RENDERER
+     =================================================== */
 
-        } else {
+  function renderChips(
+    container,
+    items,
+    type = ""
+  ) {
+    if (!container) {
+      return;
+    }
 
-            points += 8;
+    container.innerHTML = "";
 
-        }
+    if (!items || !items.length) {
+      container.innerHTML =
+        `<span class="muted">No strong signals detected.</span>`;
+      return;
+    }
 
+    items.forEach((item) => {
+      const chip = document.createElement("span");
 
-        const actionVerbs = [
+      chip.className =
+        `keyword-chip ${type}`.trim();
 
-            "developed",
-            "created",
-            "built",
-            "designed",
-            "implemented",
-            "managed",
-            "led",
-            "improved",
-            "optimized",
-            "delivered",
-            "automated",
-            "engineered",
-            "launched",
-            "analyzed",
-            "reduced",
-            "increased",
-            "achieved",
-            "maintained",
-            "deployed",
-            "integrated"
+      chip.textContent = item;
 
-        ];
+      container.appendChild(chip);
+    });
+  }
 
+  /* ===================================================
+     BREAKDOWN RENDER
+     =================================================== */
 
-        const actionCount =
-            actionVerbs.filter(
-                verb =>
-                    containsTerm(
-                        text,
-                        verb
-                    )
-            ).length;
+  function renderBreakdown(report) {
+    const items = [
+      ["Keywords", report.keyword.score],
+      ["Skills", report.skills.score],
+      ["Experience", report.experience.score],
+      ["ATS Format", report.ats],
+      ["Quality", report.quality]
+    ];
 
+    scoreBreakdown.innerHTML = items
+      .map(
+        ([label, value]) => `
+          <div class="score-item">
+            <strong>${Math.round(value)}%</strong>
+            <span>${escapeHtml(label)}</span>
+          </div>
+        `
+      )
+      .join("");
+  }
 
-        points +=
-            Math.min(
-                actionCount * 2,
-                20
-            );
+  /* ===================================================
+     JOB TARGET RENDER
+     =================================================== */
 
+  function renderJobTarget(report) {
+    const title =
+      report.targetTitle || "Target Role";
 
-        const numberMatches =
-            text.match(
-                /\b\d+(?:\.\d+)?%?\b/g
-            ) || [];
+    const company =
+      report.targetCompany || "Company not specified";
 
+    jobTargetInfo.innerHTML = `
+      <span class="target-pill">🎯 ${escapeHtml(title)}</span>
+      <span class="target-pill">🏢 ${escapeHtml(company)}</span>
+    `;
 
-        points +=
-            Math.min(
-                numberMatches.length * 3,
-                20
-            );
+    reportTargetTitle.textContent = title;
+    reportTargetCompany.textContent =
+      report.targetCompany || "Not specified";
+  }
 
+  /* ===================================================
+     JOB MATCH RENDER
+     =================================================== */
 
-        if (
-            /\b(?:achievement|achievements)\b/.test(text)
-        ) {
+  function renderJobMatch(report) {
+    const value = Math.round(
+      report.jobMatch
+    );
 
-            points += 5;
+    jobMatchScore.textContent =
+      `${value}%`;
 
-        }
+    reportExperienceFit.textContent =
+      report.experience.gap <= 0
+        ? "Good fit"
+        : `${formatYears(report.experience.gap)} gap`;
 
+    requestAnimationFrame(() => {
+      jobMatchFill.style.width =
+        `${value}%`;
+    });
+  }
 
-        if (
-            /\b(?:certification|certifications|certified)\b/.test(text)
-        ) {
+  /* ===================================================
+     REQUIREMENTS RENDER
+     =================================================== */
 
-            points += 5;
+  function renderRequirements(report) {
+    renderChips(
+      requiredKeywords,
+      report.requirements.required,
+      "required"
+    );
 
-        }
+    renderChips(
+      preferredKeywords,
+      report.requirements.preferred,
+      "preferred"
+    );
 
+    requiredCount.textContent =
+      report.requirements.required.length;
 
-        if (
-            /\b(?:project|projects)\b/.test(text)
-        ) {
+    preferredCount.textContent =
+      report.requirements.preferred.length;
+  }
 
-            points += 10;
+  /* ===================================================
+     CRITICAL SKILLS RENDER
+     =================================================== */
 
-        }
+  function renderCriticalSkills(report) {
+    if (!criticalMissingSkills) {
+      return;
+    }
 
+    const items =
+      report.criticalMissingSkills;
 
-        if (
-            /\b(?:internship|internships)\b/.test(text)
-        ) {
+    if (!items.length) {
+      criticalMissingSkills.innerHTML =
+        `<span class="muted">🎉 No major critical missing terms detected.</span>`;
 
-            points += 5;
+      return;
+    }
 
-        }
+    criticalMissingSkills.innerHTML =
+      items
+        .map(
+          (skill) => `
+            <span class="critical-skill">
+              🔥 ${escapeHtml(skill)}
+            </span>
+          `
+        )
+        .join("");
+  }
 
+  /* ===================================================
+     EXPERIENCE RENDER
+     =================================================== */
 
-        return clamp(
-            points,
-            0,
-            100
+  function renderExperienceGap(report) {
+    const data = report.experienceGap;
+
+    let className = "gap-good";
+
+    if (data.gap > 0) {
+      className =
+        data.gap >= 2
+          ? "gap-danger"
+          : "gap-warning";
+    }
+
+    experienceGap.innerHTML = `
+      <p>
+        <strong>JD requirement:</strong>
+        ${data.requiredYears > 0
+          ? escapeHtml(formatYears(data.requiredYears))
+          : "Not explicitly stated"}
+      </p>
+
+      <p>
+        <strong>Resume estimate:</strong>
+        ${escapeHtml(formatYears(data.resumeYears))}
+      </p>
+
+      <p class="${className}">
+        ${escapeHtml(data.message)}
+      </p>
+    `;
+  }
+
+  /* ===================================================
+     IMPROVEMENT RENDER
+     =================================================== */
+
+  function renderImprovementPotential(report) {
+    const potential =
+      report.improvementPotential;
+
+    improvementPotential.innerHTML = `
+      <div class="potential-number">
+        +${potential.points} pts
+      </div>
+
+      <div class="potential-note">
+        ${escapeHtml(potential.note)}
+      </div>
+
+      <div class="potential-note">
+        This is an estimated optimization opportunity,
+        not a guaranteed future score.
+      </div>
+    `;
+  }
+
+  /* ===================================================
+     SKILL PRIORITY RENDER
+     =================================================== */
+
+  function renderSkillPriority(report) {
+    const list =
+      report.skillPriority;
+
+    if (!list.length) {
+      skillPriority.innerHTML =
+        `<span class="muted">No clear skill priority could be extracted from this JD.</span>`;
+
+      return;
+    }
+
+    skillPriority.innerHTML =
+      list
+        .map(
+          (item, index) => `
+            <div class="priority-row">
+
+              <span class="priority-rank">
+                ${index + 1}
+              </span>
+
+              <span class="priority-skill">
+                ${escapeHtml(item.term)}
+              </span>
+
+              <span class="priority-type ${item.type.toLowerCase()}">
+                ${escapeHtml(item.type)}
+              </span>
+
+            </div>
+          `
+        )
+        .join("");
+  }
+
+  /* ===================================================
+     SUGGESTIONS RENDER
+     =================================================== */
+
+  function renderSuggestions(report) {
+    suggestionList.innerHTML =
+      report.recommendations
+        .map(
+          (item) =>
+            `<li>${escapeHtml(item)}</li>`
+        )
+        .join("");
+  }
+
+  /* ===================================================
+     RESULT TEXT
+     =================================================== */
+
+  function buildResultText(report) {
+    const job = report.targetTitle;
+
+    if (report.final >= 85) {
+      return `Your resume is strongly aligned with ${job}. Focus on preserving truthful job-specific keywords and measurable achievements.`;
+    }
+
+    if (report.final >= 75) {
+      return `Your resume has a good foundation for ${job}, but targeted JD alignment can make the application stronger.`;
+    }
+
+    if (report.final >= 60) {
+      return `Your resume shows some alignment with ${job}, but several job-specific terms or ATS signals need attention.`;
+    }
+
+    return `Your resume needs significant tailoring for ${job}. Start with the critical missing skills, required keywords and ATS structure.`;
+  }
+
+  /* ===================================================
+     SCORE ANIMATION
+     =================================================== */
+
+  function animateScore(targetScore) {
+    const duration = 1300;
+    const start = performance.now();
+
+    circle.style.strokeDashoffset = "440";
+
+    function frame(now) {
+      const elapsed =
+        now - start;
+
+      const progress =
+        Math.min(elapsed / duration, 1);
+
+      const eased =
+        1 - Math.pow(1 - progress, 3);
+
+      const current =
+        Math.round(targetScore * eased);
+
+      score.textContent =
+        `${current}%`;
+
+      progressBar.style.width =
+        `${current}%`;
+
+      const circumference = 440;
+
+      const offset =
+        circumference -
+        (circumference * current) / 100;
+
+      circle.style.strokeDashoffset =
+        offset;
+
+      if (progress < 1) {
+        requestAnimationFrame(frame);
+      }
+    }
+
+    requestAnimationFrame(frame);
+  }
+
+  /* ===================================================
+     SCORE COLOR
+     =================================================== */
+
+  function applyScoreColor(value) {
+    let color = "#c44459";
+
+    if (value >= 85) {
+      color = "#2e9b50";
+    } else if (value >= 75) {
+      color = "#42a85f";
+    } else if (value >= 60) {
+      color = "#c88a27";
+    }
+
+    circle.style.stroke = color;
+    score.style.color = color;
+  }
+
+  /* ===================================================
+     COMPLETE REPORT RENDER
+     =================================================== */
+
+  function renderReport(report) {
+    resultCard.style.display = "block";
+
+    renderJobTarget(report);
+    renderJobMatch(report);
+    renderBreakdown(report);
+    renderRequirements(report);
+
+    renderChips(
+      matchedKeywords,
+      report.keyword.matched,
+      "matched"
+    );
+
+    renderChips(
+      missingKeywords,
+      report.keyword.missing,
+      "missing"
+    );
+
+    renderCriticalSkills(report);
+    renderExperienceGap(report);
+    renderImprovementPotential(report);
+    renderSkillPriority(report);
+    renderSuggestions(report);
+
+    const strength =
+      getStrength(report.final);
+
+    resumeStrength.textContent =
+      strength.label;
+
+    resumeStrength.style.color =
+      strength.color;
+
+    resultText.textContent =
+      buildResultText(report);
+
+    applyScoreColor(report.final);
+    animateScore(report.final);
+
+    resultCard.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  }
+
+  /* ===================================================
+     FORM SUBMIT
+     =================================================== */
+
+  if (resumeForm) {
+    resumeForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const file =
+        resumeInput.files &&
+        resumeInput.files[0];
+
+      const jdText =
+        jobDescription.value.trim();
+
+      if (!file) {
+        showToast(
+          "Please upload your resume first."
+        );
+        return;
+      }
+
+      if (jdText.length < 30) {
+        showToast(
+          "Please paste a complete job description."
+        );
+        jobDescription.focus();
+        return;
+      }
+
+      const submitButton =
+        resumeForm.querySelector(
+          'button[type="submit"]'
         );
 
-    }
+      const originalText =
+        submitButton.textContent;
 
+      submitButton.disabled = true;
+      submitButton.textContent =
+        "Analyzing...";
 
-    /* =================================================
-       OVERALL SCORE
-    ================================================= */
+      resultCard.style.display = "none";
 
-    function calculateOverallScore(
-        keywordMatch,
-        skillMatch,
-        experienceMatch,
-        atsCompatibility,
-        quality
-    ) {
+      try {
+        await loadLibraries();
 
-        /*
-            CareerPilot heuristic weighting:
+        pdfMessage.textContent =
+          "Extracting resume text...";
 
-            Job Keywords      = 35%
-            Skills            = 25%
-            Experience        = 20%
-            ATS Compatibility = 15%
-            Resume Quality    = 5%
-        */
+        const resumeText =
+          await extractResumeText(file);
 
-        return Math.round(
-
-            keywordMatch * 0.35 +
-
-            skillMatch * 0.25 +
-
-            experienceMatch * 0.20 +
-
-            atsCompatibility * 0.15 +
-
-            quality * 0.05
-
-        );
-
-    }
-
-
-    /* =================================================
-       SCORE STRENGTH
-    ================================================= */
-
-    function getStrength(scoreValue) {
-
-        if (scoreValue >= 85) {
-
-            return {
-                label: "Excellent",
-                color: "#24934a"
-            };
-
+        if (!isUsefulResumeText(resumeText)) {
+          throw new Error(
+            "Not enough readable resume text was found."
+          );
         }
-
-        if (scoreValue >= 70) {
-
-            return {
-                label: "Strong",
-                color: "#42a85f"
-            };
-
-        }
-
-        if (scoreValue >= 55) {
-
-            return {
-                label: "Moderate",
-                color: "#d89424"
-            };
-
-        }
-
-        if (scoreValue >= 40) {
-
-            return {
-                label: "Needs Improvement",
-                color: "#e06a38"
-            };
-
-        }
-
-        return {
-            label: "Weak",
-            color: "#d63d4d"
-        };
-
-    }
-
-
-    /* =================================================
-       CIRCLE SCORE
-    ================================================= */
-
-    function animateScore(
-        targetScore,
-        color
-    ) {
-
-        const circumference =
-            2 * Math.PI * 70;
-
-
-        if (circle) {
-
-            circle.style.strokeDasharray =
-                circumference;
-
-            circle.style.strokeDashoffset =
-                circumference;
-
-            circle.style.stroke =
-                color;
-
-            circle.style.color =
-                color;
-
-            circle.classList.add("glow");
-
-            requestAnimationFrame(() => {
-
-                const offset =
-                    circumference -
-                    (
-                        targetScore /
-                        100
-                    ) *
-                    circumference;
-
-
-                circle.style.strokeDashoffset =
-                    offset;
-
-            });
-
-        }
-
-
-        if (!score) {
-            return;
-        }
-
-
-        const duration = 1300;
-
-        const startTime =
-            performance.now();
-
-
-        function updateCounter(now) {
-
-            const elapsed =
-                now - startTime;
-
-
-            const progress =
-                clamp(
-                    elapsed / duration,
-                    0,
-                    1
-                );
-
-
-            const eased =
-                1 -
-                Math.pow(
-                    1 - progress,
-                    3
-                );
-
-
-            const current =
-                Math.round(
-                    targetScore * eased
-                );
-
-
-            score.textContent =
-                `${current}%`;
-
-
-            if (progress < 1) {
-
-                requestAnimationFrame(
-                    updateCounter
-                );
-
-            }
-
-        }
-
-
-        requestAnimationFrame(
-            updateCounter
-        );
-
-    }
-
-
-    /* =================================================
-       METRIC UI
-    ================================================= */
-
-    function updateMetric(
-        textElement,
-        barElement,
-        value
-    ) {
-
-        if (textElement) {
-            textElement.textContent =
-                `${value}%`;
-        }
-
-        if (barElement) {
-
-            requestAnimationFrame(() => {
-
-                barElement.style.width =
-                    `${value}%`;
-
-            });
-
-        }
-
-    }
-
-
-    /* =================================================
-       KEYWORD UI
-    ================================================= */
-
-    function renderKeywords(
-        container,
-        items,
-        className
-    ) {
-
-        if (!container) {
-            return;
-        }
-
-
-        if (!items.length) {
-
-            container.innerHTML =
-                `<span class="keyword-empty">
-                    None found
-                </span>`;
-
-            return;
-        }
-
-
-        container.innerHTML =
-            items
-                .map(item => {
-
-                    const text =
-                        typeof item === "string"
-                            ? item
-                            : item.term;
-
-                    return `
-                        <span class="keyword-tag ${className}">
-                            ${escapeHTML(text)}
-                        </span>
-                    `;
-
-                })
-                .join("");
-
-    }
-
-
-    /* =================================================
-       SUGGESTIONS
-    ================================================= */
-
-    function generateSuggestions(
-        result
-    ) {
-
-        const suggestions = [];
-
-
-        if (
-            result.keywordMatch.percentage < 70
-        ) {
-
-            suggestions.push(
-                `Improve job keyword coverage. Your current keyword match is ${result.keywordMatch.percentage}%.`
-            );
-
-        }
-
-
-        if (
-            result.skillMatch.score < 70
-        ) {
-
-            suggestions.push(
-                `Add relevant skills from the job description only if you genuinely have those skills.`
-            );
-
-        }
-
-
-        if (
-            result.experienceMatch < 70
-        ) {
-
-            suggestions.push(
-                `Make your relevant experience and target role clearer for this job.`
-            );
-
-        }
-
-
-        if (
-            result.atsCompatibility < 75
-        ) {
-
-            suggestions.push(
-                `Use standard resume sections such as Summary, Experience, Skills, Education and Projects.`
-            );
-
-        }
-
-
-        if (
-            result.quality < 70
-        ) {
-
-            suggestions.push(
-                `Use stronger action verbs and quantify achievements with measurable results where possible.`
-            );
-
-        }
-
-
-        if (
-            result.missingKeywords.length > 0
-        ) {
-
-            const topMissing =
-                result.missingKeywords
-                    .slice(0, 5)
-                    .map(item => item.term)
-                    .join(", ");
-
-
-            suggestions.push(
-                `Review these missing job terms: ${topMissing}. Add them only where they truthfully describe your experience.`
-            );
-
-        }
-
-
-        if (
-            countWords(result.resumeText) < 150
-        ) {
-
-            suggestions.push(
-                "Your extracted resume text is quite short. Make sure the uploaded resume contains selectable text or is properly readable."
-            );
-
-        }
-
-
-        if (!suggestions.length) {
-
-            suggestions.push(
-                "Your resume has a strong match. Keep the wording truthful and tailor the final resume to the exact job."
-            );
-
-        }
-
-
-        return unique(
-            suggestions
-        );
-
-    }
-
-
-    function renderSuggestions(
-        suggestions
-    ) {
-
-        if (!suggestionList) {
-            return;
-        }
-
-
-        suggestionList.innerHTML =
-            suggestions
-                .map(
-                    suggestion =>
-                        `<li>${escapeHTML(suggestion)}</li>`
-                )
-                .join("");
-
-    }
-
-
-    /* =================================================
-       FORM VALIDATION
-    ================================================= */
-
-    function validateForm() {
-
-        if (!resumeForm) {
-            return false;
-        }
-
-
-        if (
-            !fullname.value.trim()
-        ) {
-
-            showToast(
-                "Please enter your full name."
-            );
-
-            fullname.focus();
-
-            return false;
-
-        }
-
-
-        if (
-            !email.value.trim() ||
-            !email.checkValidity()
-        ) {
-
-            showToast(
-                "Please enter a valid email."
-            );
-
-            email.focus();
-
-            return false;
-
-        }
-
-
-        if (
-            !password.value.trim()
-        ) {
-
-            showToast(
-                "Please enter a password."
-            );
-
-            password.focus();
-
-            return false;
-
-        }
-
-
-        if (
-            !experience.value
-        ) {
-
-            showToast(
-                "Please select your experience."
-            );
-
-            experience.focus();
-
-            return false;
-
-        }
-
-
-        if (
-            !resumeInput.files ||
-            !resumeInput.files[0]
-        ) {
-
-            showToast(
-                "Please upload your resume."
-            );
-
-            resumeInput.focus();
-
-            return false;
-
-        }
-
-
-        if (
-            !careerGoal.value.trim()
-        ) {
-
-            showToast(
-                "Please enter your target career/job role."
-            );
-
-            careerGoal.focus();
-
-            return false;
-
-        }
-
-
-        if (
-            jobDescription.value.trim().length < 30
-        ) {
-
-            showToast(
-                "Please paste a complete job description."
-            );
-
-            jobDescription.focus();
-
-            return false;
-
-        }
-
-
-        const jobType =
-            document.querySelector(
-                'input[name="jobtype"]:checked'
-            );
-
-
-        if (!jobType) {
-
-            showToast(
-                "Please select a job type."
-            );
-
-            return false;
-
-        }
-
 
         const selectedSkills =
-            getSelectedSkills();
+          getSelectedSkills();
 
+        const experienceLevel =
+          $("experience").value;
 
-        if (
-            selectedSkills.length === 0
-        ) {
+        const title =
+          targetJobTitle.value.trim();
 
-            showToast(
-                "Please select at least one skill."
-            );
+        const company =
+          targetCompany.value.trim();
 
-            return false;
+        const report =
+          calculateReport({
+            resumeText,
+            jdText,
+            experienceLevel,
+            selectedSkills,
+            targetTitle: title,
+            targetCompany: company
+          });
 
-        }
+        renderReport(report);
 
+        showToast(
+          "Job-specific ATS analysis completed."
+        );
 
-        return true;
+      } catch (error) {
+        console.error(error);
 
+        showToast(
+          error.message ||
+          "Analysis failed. Please try again."
+        );
+
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent =
+          originalText;
+      }
+    });
+  }
+
+  /* ===================================================
+     RESET
+     =================================================== */
+
+  if (resetBtn) {
+    resetBtn.addEventListener("click", () => {
+      resumeForm.reset();
+
+      fileName.textContent =
+        "No file selected";
+
+      previewContainer.style.display =
+        "none";
+
+      resultCard.style.display =
+        "none";
+
+      pdfDoc = null;
+      currentPdfBytes = null;
+      pdfScale = 1;
+
+      if (pdfCanvas) {
+        const context =
+          pdfCanvas.getContext("2d");
+
+        context.clearRect(
+          0,
+          0,
+          pdfCanvas.width,
+          pdfCanvas.height
+        );
+
+        pdfCanvas.width = 0;
+        pdfCanvas.height = 0;
+      }
+
+      progressBar.style.width = "0%";
+      score.textContent = "0%";
+      circle.style.strokeDashoffset =
+        "440";
+
+      showToast(
+        "Analyzer has been reset."
+      );
+    });
+  }
+
+  /* ===================================================
+     JOB FILTERING
+     =================================================== */
+
+  function filterJobs() {
+    if (!jobsTable) {
+      return;
     }
 
-
-    /* =================================================
-       MAIN ANALYSIS
-    ================================================= */
-
-    if (resumeForm) {
-
-        resumeForm.addEventListener(
-            "submit",
-            async event => {
-
-                event.preventDefault();
-
-
-                if (analysisInProgress) {
-                    return;
-                }
-
-
-                if (!validateForm()) {
-                    return;
-                }
-
-
-                analysisInProgress = true;
-
-
-                try {
-
-                    if (resultCard) {
-                        resultCard.classList.remove("active");
-                    }
-
-
-                    if (progressContainer) {
-                        progressContainer.hidden = false;
-                    }
-
-
-                    setProgress(5);
-
-
-                    const file =
-                        resumeInput.files[0];
-
-
-                    if (pdfMessage) {
-
-                        pdfMessage.textContent =
-                            "Reading resume...";
-                    }
-
-
-                    const resumeText =
-                        await extractResumeText(
-                            file
-                        );
-
-
-                    setProgress(45);
-
-
-                    if (
-                        countWords(resumeText) < 20
-                    ) {
-
-                        throw new Error(
-                            "Very little text could be extracted from the resume. Please use a text-readable PDF or DOCX."
-                        );
-
-                    }
-
-
-                    const jdText =
-                        jobDescription.value.trim();
-
-
-                    const goal =
-                        careerGoal.value.trim();
-
-
-                    const selectedSkills =
-                        getSelectedSkills();
-
-
-                    setProgress(55);
-
-
-                    const jdTerms =
-                        extractJDTerms(
-                            jdText
-                        );
-
-
-                    const keywordMatch =
-                        compareKeywords(
-                            resumeText,
-                            jdTerms
-                        );
-
-
-                    setProgress(65);
-
-
-                    const skillMatch =
-                        calculateSkillMatch(
-                            resumeText,
-                            jdText,
-                            selectedSkills
-                        );
-
-
-                    const experienceMatch =
-                        calculateExperienceScore(
-                            resumeText,
-                            jdText,
-                            experience.value,
-                            goal
-                        );
-
-
-                    const atsCompatibility =
-                        calculateATSCompatibility(
-                            resumeText
-                        );
-
-
-                    const quality =
-                        calculateResumeQuality(
-                            resumeText
-                        );
-
-
-                    const overall =
-                        calculateOverallScore(
-                            keywordMatch.percentage,
-                            skillMatch.score,
-                            experienceMatch,
-                            atsCompatibility,
-                            quality
-                        );
-
-
-                    const result = {
-
-                        score: overall,
-
-                        keywordMatch,
-
-                        skillMatch,
-
-                        experienceMatch,
-
-                        atsCompatibility,
-
-                        quality,
-
-                        missingKeywords:
-                            keywordMatch.missing,
-
-                        resumeText
-
-                    };
-
-
-                    setProgress(80);
-
-
-                    renderAnalysis(result);
-
-
-                    setProgress(100);
-
-
-                    if (progressContainer) {
-
-                        setTimeout(() => {
-
-                            progressContainer.hidden =
-                                true;
-
-                            setProgress(0);
-
-                        }, 700);
-
-                    }
-
-
-                } catch (error) {
-
-                    console.error(
-                        "ATS Analysis Error:",
-                        error
-                    );
-
-
-                    if (progressContainer) {
-                        progressContainer.hidden =
-                            true;
-                    }
-
-
-                    setProgress(0);
-
-
-                    showToast(
-                        error.message ||
-                        "Unable to analyze the resume."
-                    );
-
-
-                } finally {
-
-                    analysisInProgress =
-                        false;
-
-                }
-
-            }
-        );
-
-    }
-
-
-    /* =================================================
-       RENDER ANALYSIS
-    ================================================= */
-
-    function renderAnalysis(result) {
-
-        if (!resultCard) {
-            return;
+    const search =
+      jobSearch.value
+        .trim()
+        .toLowerCase();
+
+    const location =
+      jobLocation.value
+        .trim()
+        .toLowerCase();
+
+    const rows =
+      Array.from(
+        jobsTable.querySelectorAll(
+          "tbody tr"
+        )
+      );
+
+    let visible = 0;
+
+    rows.forEach((row) => {
+      const text =
+        row.textContent.toLowerCase();
+
+      const rowLocation =
+        row.cells[2]
+          ? row.cells[2].textContent
+              .trim()
+              .toLowerCase()
+          : "";
+
+      const searchMatch =
+        !search ||
+        text.includes(search);
+
+      const locationMatch =
+        !location ||
+        rowLocation === location;
+
+      const show =
+        searchMatch &&
+        locationMatch;
+
+      row.style.display =
+        show ? "" : "none";
+
+      if (show) {
+        visible++;
+      }
+    });
+
+    noJobs.style.display =
+      visible === 0
+        ? "block"
+        : "none";
+  }
+
+  if (jobSearch) {
+    jobSearch.addEventListener(
+      "input",
+      filterJobs
+    );
+  }
+
+  if (jobLocation) {
+    jobLocation.addEventListener(
+      "change",
+      filterJobs
+    );
+  }
+
+  /* ===================================================
+     SAMPLE JOB BUTTONS
+     =================================================== */
+
+  if (jobsTable) {
+    jobsTable.addEventListener(
+      "click",
+      (event) => {
+        const button =
+          event.target.closest(".job-btn");
+
+        if (!button) {
+          return;
         }
 
+        const row =
+          button.closest("tr");
 
-        const strength =
-            getStrength(
-                result.score
-            );
-
-
-        resultCard.classList.add("active");
-
-
-        if (resultText) {
-
-            resultText.textContent =
-                `Your resume matches approximately ${result.score}% of this target job using CareerPilot's heuristic analysis.`;
-
+        if (!row) {
+          return;
         }
 
-
-        if (resumeStrength) {
-
-            resumeStrength.textContent =
-                strength.label;
-
-            resumeStrength.style.color =
-                strength.color;
-
-        }
-
-
-        if (scoreSummary) {
-
-            scoreSummary.textContent =
-                `Keyword match: ${result.keywordMatch.percentage}% • Skills: ${result.skillMatch.score}% • Experience: ${result.experienceMatch}%`;
-
-        }
-
-
-        updateMetric(
-            keywordScore,
-            keywordScoreBar,
-            result.keywordMatch.percentage
-        );
-
-
-        updateMetric(
-            skillsScore,
-            skillsScoreBar,
-            result.skillMatch.score
-        );
-
-
-        updateMetric(
-            experienceScore,
-            experienceScoreBar,
-            result.experienceMatch
-        );
-
-
-        updateMetric(
-            atsScore,
-            atsScoreBar,
-            result.atsCompatibility
-        );
-
-
-        updateMetric(
-            qualityScore,
-            qualityScoreBar,
-            result.quality
-        );
-
-
-        const matchedForDisplay =
-            unique(
-                result.keywordMatch.matched
-                    .map(item => item.term)
-                    .concat(
-                        result.skillMatch.matched
-                    )
-            );
-
-
-        const missingForDisplay =
-            unique(
-                result.keywordMatch.missing
-                    .map(item => item.term)
-                    .concat(
-                        result.skillMatch.missing
-                    )
-            );
-
-
-        renderKeywords(
-            matchedKeywords,
-            matchedForDisplay,
-            "matched"
-        );
-
-
-        renderKeywords(
-            missingKeywords,
-            missingForDisplay,
-            "missing"
-        );
-
-
-        const suggestions =
-            generateSuggestions(
-                result
-            );
-
-
-        renderSuggestions(
-            suggestions
-        );
-
-
-        animateScore(
-            result.score,
-            strength.color
-        );
-
-
-        setTimeout(() => {
-
-            resultCard.scrollIntoView({
-                behavior: "smooth",
-                block: "start"
-            });
-
-        }, 150);
-
-    }
-
-
-    /* =================================================
-       RESET
-    ================================================= */
-
-    if (resumeForm) {
-
-        resumeForm.addEventListener(
-            "reset",
-            () => {
-
-                setTimeout(() => {
-
-                    if (fileName) {
-                        fileName.textContent =
-                            "No file selected";
-                    }
-
-
-                    if (previewContainer) {
-                        previewContainer.classList.remove(
-                            "active"
-                        );
-                    }
-
-
-                    if (resultCard) {
-                        resultCard.classList.remove(
-                            "active"
-                        );
-                    }
-
-
-                    if (progressContainer) {
-                        progressContainer.hidden =
-                            true;
-                    }
-
-
-                    if (matchedKeywords) {
-
-                        matchedKeywords.innerHTML =
-                            `<span class="keyword-empty">
-                                No analysis yet.
-                            </span>`;
-
-                    }
-
-
-                    if (missingKeywords) {
-
-                        missingKeywords.innerHTML =
-                            `<span class="keyword-empty">
-                                No analysis yet.
-                            </span>`;
-
-                    }
-
-
-                    if (suggestionList) {
-                        suggestionList.innerHTML = "";
-                    }
-
-
-                    [
-                        keywordScore,
-                        skillsScore,
-                        experienceScore,
-                        atsScore,
-                        qualityScore
-                    ].forEach(element => {
-
-                        if (element) {
-                            element.textContent = "0%";
-                        }
-
-                    });
-
-
-                    [
-                        keywordScoreBar,
-                        skillsScoreBar,
-                        experienceScoreBar,
-                        atsScoreBar,
-                        qualityScoreBar
-                    ].forEach(element => {
-
-                        if (element) {
-                            element.style.width = "0%";
-                        }
-
-                    });
-
-
-                    if (score) {
-                        score.textContent = "0%";
-                    }
-
-
-                    if (resumeStrength) {
-
-                        resumeStrength.textContent =
-                            "-";
-
-                    }
-
-
-                    if (scoreSummary) {
-
-                        scoreSummary.textContent =
-                            "Your analysis will appear here.";
-
-                    }
-
-
-                    if (circle) {
-
-                        circle.style.strokeDashoffset =
-                            440;
-
-                        circle.style.stroke =
-                            "#42a85f";
-
-                    }
-
-
-                    pdfDocument = null;
-
-
-                }, 0);
-
-            }
-        );
-
-    }
-
-
-    if (resetBtn) {
-
-        resetBtn.addEventListener(
-            "click",
-            () => {
-
-                showToast(
-                    "Form reset successfully."
-                );
-
-            }
-        );
-
-    }
-
-
-    /* =================================================
-       JOB SEARCH
-    ================================================= */
-
-    function filterJobs() {
-
-        if (!jobsTable) {
-            return;
-        }
-
-
-        const rows =
-            jobsTable.querySelectorAll(
-                "tbody tr"
-            );
-
-
-        const search =
-            cleanForMatching(
-                jobSearch
-                    ? jobSearch.value
-                    : ""
-            );
-
+        const role =
+          row.cells[0].textContent.trim();
+
+        const company =
+          row.cells[1].textContent.trim();
 
         const location =
-            jobLocation
-                ? jobLocation.value
-                : "all";
+          row.cells[2].textContent.trim();
 
+        targetJobTitle.value =
+          role;
 
-        let visibleCount = 0;
+        targetCompany.value =
+          company;
 
+        showToast(
+          `${role} at ${company} selected. Paste its full JD to analyze it.`
+        );
 
-        rows.forEach(row => {
-
-            const rowText =
-                cleanForMatching(
-                    row.textContent
-                );
-
-
-            const rowLocation =
-                row.cells[2]
-                    ? row.cells[2].textContent.trim()
-                    : "";
-
-
-            const searchMatch =
-                !search ||
-                rowText.includes(search);
-
-
-            const locationMatch =
-                location === "all" ||
-                rowLocation === location;
-
-
-            const visible =
-                searchMatch &&
-                locationMatch;
-
-
-            row.style.display =
-                visible ? "" : "none";
-
-
-            if (visible) {
-                visibleCount++;
-            }
-
+        resumeSection.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
         });
 
+        setTimeout(() => {
+          jobDescription.focus();
+        }, 600);
 
-        if (noJobs) {
+        console.info(
+          "Sample job selected:",
+          {
+            role,
+            company,
+            location
+          }
+        );
+      }
+    );
+  }
 
-            noJobs.style.display =
-                visibleCount === 0
-                    ? "block"
-                    : "none";
+  /* ===================================================
+     FEEDBACK
+     =================================================== */
 
-        }
-
-    }
-
-
-    if (jobSearch) {
-
-        jobSearch.addEventListener(
-            "input",
-            filterJobs
+  if (feedbackBtn) {
+    feedbackBtn.addEventListener("click", () => {
+      const message =
+        prompt(
+          "What would you like to improve in CareerPilot AI?"
         );
 
-    }
-
-
-    if (jobLocation) {
-
-        jobLocation.addEventListener(
-            "change",
-            filterJobs
+      if (message && message.trim()) {
+        showToast(
+          "Thanks for your feedback!"
         );
 
-    }
-
-
-    /* =================================================
-       JOB BUTTONS
-    ================================================= */
-
-    if (jobsTable) {
-
-        jobsTable.addEventListener(
-            "click",
-            event => {
-
-                const button =
-                    event.target.closest(
-                        ".job-btn"
-                    );
-
-
-                if (!button) {
-                    return;
-                }
-
-
-                const row =
-                    button.closest("tr");
-
-
-                if (!row) {
-                    return;
-                }
-
-
-                const company =
-                    row.cells[0]
-                        ? row.cells[0].textContent.trim()
-                        : "";
-
-
-                const role =
-                    row.cells[1]
-                        ? row.cells[1].textContent.trim()
-                        : "";
-
-
-                const location =
-                    row.cells[2]
-                        ? row.cells[2].textContent.trim()
-                        : "";
-
-
-                if (careerGoal) {
-
-                    careerGoal.value =
-                        role;
-
-                }
-
-
-                showToast(
-                    `${role} at ${company} selected (${location}). Paste the matching JD to analyze it.`
-                );
-
-
-                if (resumeSection) {
-
-                    resumeSection.scrollIntoView({
-                        behavior: "smooth",
-                        block: "start"
-                    });
-
-                }
-
-            }
+        console.log(
+          "CareerPilot feedback:",
+          message.trim()
         );
+      }
+    });
+  }
 
-    }
+  /* ===================================================
+     INITIAL SCORE STATE
+     =================================================== */
 
+  if (circle) {
+    circle.style.strokeDashoffset =
+      "440";
+  }
 
-    /* =================================================
-       FEEDBACK
-    ================================================= */
-
-    if (feedbackBtn) {
-
-        feedbackBtn.addEventListener(
-            "click",
-            () => {
-
-                const feedback =
-                    window.prompt(
-                        "What would you improve in CareerPilot AI?"
-                    );
-
-
-                if (
-                    feedback &&
-                    feedback.trim()
-                ) {
-
-                    showToast(
-                        "Thanks! Your feedback has been recorded for this session."
-                    );
-
-                }
-
-            }
-        );
-
-    }
-
-
-    /* =================================================
-       INITIAL JOB FILTER
-    ================================================= */
-
-    filterJobs();
-
-
-    /* =================================================
-       PREVENT DRAG-DROP ACCIDENTS
-    ================================================= */
-
-    if (resumeInput) {
-
-        [
-            "dragenter",
-            "dragover"
-        ].forEach(eventName => {
-
-            resumeInput.addEventListener(
-                eventName,
-                event => {
-                    event.preventDefault();
-                }
-            );
-
-        });
-
-    }
+  if (progressBar) {
+    progressBar.style.width =
+      "0%";
+  }
 
 });
