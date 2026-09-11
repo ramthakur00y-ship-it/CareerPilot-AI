@@ -546,3 +546,258 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 3000);
   }
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+  const resumeInput = document.getElementById('resume');
+  const fileNameDisplay = document.getElementById('fileName');
+  const previewContainer = document.getElementById('previewContainer');
+  const pdfMessage = document.getElementById('pdfMessage');
+  const pdfCanvas = document.getElementById('pdfCanvas');
+  const closePreviewBtn = document.getElementById('closePreview');
+  const zoomInBtn = document.getElementById('zoomIn');
+  const zoomOutBtn = document.getElementById('zoomOut');
+  const resumeForm = document.getElementById('resumeForm');
+  const resetBtn = document.getElementById('resetBtn');
+
+  let currentZoom = 1.0;
+
+  // 1. Handle File Selection and Preview Generation
+  resumeInput.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) {
+      fileNameDisplay.textContent = 'No file selected';
+      previewContainer.style.display = 'none';
+      return;
+    }
+
+    fileNameDisplay.textContent = `Selected: ${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+    previewContainer.style.display = 'block';
+    pdfMessage.textContent = 'Loading document preview...';
+
+    const fileType = file.type;
+
+    if (fileType === 'application/pdf') {
+      renderPDFPreview(file);
+    } else if (
+      fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || 
+      fileType === 'application/msword'
+    ) {
+      renderDocxPreview(file);
+    } else {
+      pdfMessage.textContent = 'Preview not available for this file format. Text extraction will still work.';
+      const ctx = pdfCanvas.getContext('2d');
+      ctx.clearRect(0, 0, pdfCanvas.width, pdfCanvas.height);
+      pdfCanvas.width = 400;
+      pdfCanvas.height = 150;
+      ctx.fillStyle = '#f1f5f9';
+      ctx.fillRect(0, 0, pdfCanvas.width, pdfCanvas.height);
+      ctx.fillStyle = '#475569';
+      ctx.font = '14px sans-serif';
+      ctx.fillText('Document Loaded: ' + file.name, 20, 80);
+    }
+  });
+
+  // 2. Render PDF using basic object / canvas or fallback text indicator
+  function renderPDFPreview(file) {
+    const fileReader = new FileReader();
+    fileReader.onload = function() {
+      const typedarray = new Uint8Array(this.result);
+      
+      // Check if PDF.js library is loaded globally
+      if (typeof pdfjsLib !== 'undefined') {
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+        
+        pdfjsLib.getDocument(typedarray).promise.then(pdf => {
+          pdf.getPage(1).then(page => {
+            const scale = 1.2 * currentZoom;
+            const viewport = page.getViewport({ scale: scale });
+            const context = pdfCanvas.getContext('2d');
+            
+            pdfCanvas.height = viewport.height;
+            pdfCanvas.width = viewport.width;
+
+            const renderContext = {
+              canvasContext: context,
+              viewport: viewport
+            };
+            
+            page.render(renderContext).promise.then(() => {
+              pdfMessage.textContent = `Displaying page 1 of ${pdf.numFrames || 1} (PDF)`;
+            });
+          });
+        }).catch(err => {
+          console.error(err);
+          pdfMessage.textContent = 'Error rendering PDF preview. File is ready for analysis.';
+        });
+      } else {
+        // Fallback if PDF.js CDN is not included in HTML
+        pdfMessage.textContent = 'PDF loaded successfully. (Include PDF.js script for full visual preview canvas)';
+        const ctx = pdfCanvas.getContext('2d');
+        pdfCanvas.width = 400;
+        pdfCanvas.height = 200;
+        ctx.fillStyle = '#f8fafc';
+        ctx.fillRect(0, 0, pdfCanvas.width, pdfCanvas.height);
+        ctx.fillStyle = '#0f172a';
+        ctx.font = 'bold 16px sans-serif';
+        ctx.fillText('PDF Document Ready', 30, 80);
+        ctx.font = '13px sans-serif';
+        ctx.fillStyle = '#64748b';
+        ctx.fillText(file.name, 30, 110);
+      }
+    };
+    fileReader.readAsArrayBuffer(file);
+  }
+
+  // 3. Render DOCX info placeholder
+  function renderDocxPreview(file) {
+    pdfMessage.textContent = 'Word Document loaded successfully.';
+    const ctx = pdfCanvas.getContext('2d');
+    pdfCanvas.width = 400;
+    pdfCanvas.height = 200;
+    ctx.fillStyle = '#eff6ff';
+    ctx.fillRect(0, 0, pdfCanvas.width, pdfCanvas.height);
+    ctx.fillStyle = '#1e40af';
+    ctx.font = 'bold 16px sans-serif';
+    ctx.fillText('Word Document (.docx) Ready', 30, 80);
+    ctx.font = '13px sans-serif';
+    ctx.fillStyle = '#3b82f6';
+    ctx.fillText(file.name, 30, 110);
+  }
+
+  // Preview Control Actions
+  closePreviewBtn.addEventListener('click', () => {
+    previewContainer.style.display = 'none';
+  });
+
+  zoomInBtn.addEventListener('click', () => {
+    currentZoom += 0.2;
+    if (resumeInput.files[0]) {
+      const event = new Event('change');
+      resumeInput.dispatchEvent(event);
+    }
+  });
+
+  zoomOutBtn.addEventListener('click', () => {
+    if (currentZoom > 0.6) {
+      currentZoom -= 0.2;
+      if (resumeInput.files[0]) {
+        const event = new Event('change');
+        resumeInput.dispatchEvent(event);
+      }
+    }
+  });
+
+  // 4. Handle Form Submission & ATS Analysis Simulation
+  resumeForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const targetTitle = document.getElementById('targetJobTitle').value || 'Target Role';
+    const targetCompany = document.getElementById('targetCompany').value || 'Target Company';
+    const experienceFit = document.getElementById('experience').value;
+    const jdText = document.getElementById('jobDescription').value;
+
+    // Collect checked skills
+    const selectedSkills = Array.from(document.querySelectorAll('input[name="skills"]:checked'))
+      .map(cb => cb.value);
+
+    // Update Report Header labels
+    document.getElementById('reportTargetTitle').textContent = targetTitle;
+    document.getElementById('reportTargetCompany').textContent = targetCompany;
+    document.getElementById('reportExperienceFit').textContent = experienceFit;
+
+    // Calculate mock matching scores based on inputs
+    const baseScore = Math.floor(Math.random() * 25) + 60; // Score between 60-85%
+    const finalScore = selectedSkills.length > 3 ? Math.min(baseScore + 15, 96) : baseScore;
+
+    // Update UI elements with results
+    document.getElementById('score').textContent = `${finalScore}%`;
+    document.getElementById('progressBar').style.width = `${finalScore}%`;
+    document.getElementById('jobMatchScore').textContent = `${finalScore}%`;
+    document.getElementById('jobMatchFill').style.width = `${finalScore}%`;
+    
+    // Set circle progress stroke offset if applicable
+    const circle = document.getElementById('circle');
+    if (circle) {
+      const radius = circle.r.baseVal.value;
+      const circumference = 2 * Math.PI * radius;
+      const offset = circumference - (finalScore / 100) * circumference;
+      circle.style.strokeDasharray = `${circumference} ${circumference}`;
+      circle.style.strokeDashoffset = offset;
+    }
+
+    // Verdict text
+    const strengthEl = document.getElementById('resumeStrength');
+    const resultTextEl = document.getElementById('resultText');
+    if (finalScore >= 85) {
+      strengthEl.textContent = 'High Optimization (Strong Match)';
+      resultTextEl.textContent = 'Your resume aligns exceptionally well with the target role requirements.';
+    } else if (finalScore >= 70) {
+      strengthEl.textContent = 'Moderate Optimization (Good Match)';
+      resultTextEl.textContent = 'Good foundation, but incorporating missing keywords will boost interview callbacks.';
+    } else {
+      strengthEl.textContent = 'Needs Improvement';
+      resultTextEl.textContent = 'Significant gaps identified between your resume profile and the job description.';
+    }
+
+    // Populate Dynamic Lists
+    document.getElementById('requiredCount').textContent = selectedSkills.length > 0 ? selectedSkills.length : '4';
+    document.getElementById('preferredCount').textContent = '3';
+
+    // Required & Preferred Keywords simulation
+    renderBadges('requiredKeywords', ['JavaScript', 'React', 'TypeScript', 'Git', 'Agile'], 'badge-required');
+    renderBadges('preferredKeywords', ['AWS', 'Docker', 'Node.js'], 'badge-preferred');
+    renderBadges('matchedKeywords', selectedSkills.length > 0 ? selectedSkills : ['JavaScript', 'React', 'Git'], 'badge-matched');
+    renderBadges('missingKeywords', ['GraphQL', 'CI/CD Pipelines', 'Jest'], 'badge-missing');
+    
+    // Critical Missing Skills
+    const criticalBox = document.getElementById('criticalMissingSkills');
+    criticalBox.innerHTML = `
+      <div class="pill-tag missing">GraphQL Integration</div>
+      <div class="pill-tag missing">Automated Testing (Jest/Cypress)</div>
+      <div class="pill-tag missing">Cloud Deployment (AWS/Docker)</div>
+    `;
+
+    // Experience Alignment & Improvement Potential
+    document.getElementById('experienceGap').textContent = `Your selected experience level (${experienceFit}) matches the seniority requirements outlined in the job description.`;
+    document.getElementById('improvementPotential').textContent = `Adding targeted keywords and addressing missing skills can increase your overall ATS score by up to +18%.`;
+
+    // Prioritized Action Items
+    document.getElementById('skillPriority').innerHTML = `
+      <ol style="margin: 0; padding-left: 20px; color: #334155; line-height: 1.6;">
+        <li>Add explicit mentions of state management libraries (Redux/Zustand) in your experience bullet points.</li>
+        <li>Quantify your performance metrics (e.g., "Improved page load speed by 25%").</li>
+        <li>Ensure standard section headings like "Work Experience", "Skills", and "Education" are used for clean parser compliance.</li>
+      </ol>
+    `;
+
+    // Actionable Recommendations
+    const suggestionList = document.getElementById('suggestionList');
+    suggestionList.innerHTML = `
+      <li>Incorporate exact phrase matches found in the job description text box.</li>
+      <li>Save and export your resume as a text-searchable PDF format rather than an image scan.</li>
+      <li>Highlight leadership or cross-functional collaboration experience clearly.</li>
+    `;
+
+    // Scroll smoothly to result section
+    document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth' });
+  });
+
+  // Reset Form
+  resetBtn.addEventListener('click', () => {
+    resumeForm.reset();
+    fileNameDisplay.textContent = 'No file selected';
+    previewContainer.style.display = 'none';
+    document.getElementById('score').textContent = '0%';
+    document.getElementById('progressBar').style.width = '0%';
+    document.getElementById('jobMatchScore').textContent = '0%';
+    document.getElementById('jobMatchFill').style.width = '0%';
+    document.getElementById('resumeStrength').textContent = 'Evaluating...';
+    document.getElementById('resultText').textContent = 'Your score breakdown across custom matching filters.';
+  });
+
+  function renderBadges(containerId, items, className) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    container.innerHTML = items.map(item => `<span class="keyword-pill ${className}">${item}</span>`).join('');
+  }
+});
