@@ -9,7 +9,7 @@
 (function () {
     "use strict";
 
-    const API_BASE = "http://localhost:5000/api";
+   const API_BASE = "https://careerpilot-ai-rjq5.onrender.com/api";
 
     const TOKEN_KEY = "careerPilotToken";
     const RESUME_ID_KEY = "careerPilotResumeId";
