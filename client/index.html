@@ -41,19 +41,22 @@
         <a href="#builder" class="secondary-btn">Build Resume Now</a>
       </div>
       <div class="hero-stats">
-        <div>
-          <strong>98%</strong>
-          <span>ATS Pass Rate</span>
-        </div>
-        <div>
-          <strong>50K+</strong>
-          <span>Resumes Optimized</span>
-        </div>
-        <div>
-          <strong>4.9/5</strong>
-          <span>User Rating</span>
-        </div>
-      </div>
+        
+     
+      <div>
+  <strong>⟡ 7+</strong>
+  <span>ATS Analysis Factors</span>
+</div>
+
+<div>
+  <strong>◈ Real-Time</strong>
+  <span>Resume Evaluation</span>
+</div>
+
+<div>
+  <strong>⌁ PDF & DOCX</strong>
+  <span>File Support</span>
+</div>
     </div>
   </section>
 
@@ -89,7 +92,6 @@
   <section class="section" id="features">
     <div class="section-container">
       <div class="section-heading">
-        
         <h2>Everything You Need to Accelerate Your Job Search</h2>
         <p>Comprehensive tools unified under a single workflow environment.</p>
       </div>
@@ -112,113 +114,502 @@
       </div>
     </div>
   </section>
+<!-- ================= STEP 3: RESUME BUILDER SECTION ================= -->
+<section class="section alternate-section" id="builder">
 
-  <!-- ================= STEP 3: RESUME BUILDER SECTION ================= -->
-  <section class="section alternate-section" id="builder">
-    <div class="section-container">
-      <div class="section-heading">
-        
-        <h2>Interactive Resume Builder</h2>
-        <p>Fill out your professional profile below and watch your live resume preview generate instantly.</p>
-      </div>
+  <div class="section-container">
 
-      <div class="builder-layout">
-        <!-- Builder Inputs Form -->
-        <div class="builder-form-card">
-          <form id="resumeBuilderForm">
-            <!-- Personal Info -->
-            <div class="builder-section-block">
-              <h3>1. Personal Information</h3>
-              <div class="form-group">
-                <label>Full Name</label>
-                <input type="text" name="fullName" placeholder="e.g. Alex Morgan" required>
-              </div>
-              <div class="form-group">
-                <label>Email Address</label>
-                <input type="email" name="email" placeholder="e.g. alex@example.com">
-              </div>
-              <div class="form-group">
-                <label>Phone Number</label>
-                <input type="text" name="phone" placeholder="e.g. +1 (555) 019-2834">
-              </div>
-              <div class="form-group">
-                <label>Location</label>
-                <input type="text" name="location" placeholder="e.g. San Francisco, CA">
-              </div>
-            </div>
+    <!-- Heading -->
+    <div class="section-heading">
+      <h2>Interactive Resume Builder</h2>
 
-            <!-- Summary -->
-            <div class="builder-section-block">
-              <h3>2. Professional Summary</h3>
-              <div class="form-group">
-                <label>Summary Statement</label>
-                <textarea name="summary" placeholder="Write a brief professional overview..."></textarea>
-              </div>
-            </div>
-
-            <!-- Experience -->
-            <div class="builder-section-block">
-              <h3>3. Work Experience</h3>
-              <div id="experienceFields"></div>
-              <button type="button" class="secondary-btn" id="addExpBtn" style="width: 100%; margin-top: 10px;">+ Add Experience</button>
-            </div>
-
-            <!-- Education -->
-            <div class="builder-section-block">
-              <h3>4. Education</h3>
-              <div id="educationFields"></div>
-              <button type="button" class="secondary-btn" id="addEduBtn" style="width: 100%; margin-top: 10px;">+ Add Education</button>
-            </div>
-
-            <!-- Skills -->
-            <div class="builder-section-block">
-              <h3>5. Skills (Comma Separated)</h3>
-              <div class="form-group">
-                <label>Core Technical & Soft Skills</label>
-                <input type="text" name="skillsList" placeholder="JavaScript, React, Node.js, Agile, Git">
-              </div>
-            </div>
-          </form>
-        </div>
-
-        <!-- Live Preview Panel (Printable Area) -->
-        <div class="builder-preview-wrapper">
-          <div class="preview-toolbar">
-            <span>Live Resume Preview</span>
-            <button class="primary-btn" id="printResumeBtn" style="padding: 6px 16px; min-height: 38px;">Print / Save PDF</button>
-          </div>
-          <div class="printable-resume-container" id="printableResume">
-            <div class="res-header-block">
-              <h1 id="previewName">Your Name</h1>
-              <p id="previewContact">email@example.com | Phone | Location</p>
-            </div>
-            <div class="res-body-block">
-              <h3>Professional Summary</h3>
-              <p id="previewSummary" class="res-text-content">Your professional summary will appear here...</p>
-            </div>
-            <div class="res-body-block">
-              <h3>Experience</h3>
-              <div id="previewExperienceList"></div>
-            </div>
-            <div class="res-body-block">
-              <h3>Education</h3>
-              <div id="previewEducationList"></div>
-            </div>
-            <div class="res-body-block">
-              <h3>Skills</h3>
-              <p id="previewSkillsList" class="res-text-content"></p>
-            </div>
-          </div>
-        </div>
-      </div>
+      <p>
+        Create your professional resume with live preview,
+        multiple skills, projects, experience and certifications.
+      </p>
     </div>
-  </section>
+
+
+    <div class="builder-layout">
+
+
+      <!-- =====================================================
+           LEFT SIDE - BUILDER FORM
+           ===================================================== -->
+
+      <div class="builder-form-card">
+
+        <form id="resumeBuilderForm">
+
+
+          <!-- =================================================
+               1. PERSONAL INFORMATION
+               ================================================= -->
+
+          <div class="builder-section-block">
+
+            <h3>1. Personal Information</h3>
+
+            <div class="form-group">
+              <label>Full Name</label>
+
+              <input
+                type="text"
+                name="fullName"
+                placeholder="e.g. Ram Lakhan"
+                required
+              >
+            </div>
+
+
+            <div class="form-group">
+              <label>Email Address</label>
+
+              <input
+                type="email"
+                name="email"
+                placeholder="e.g. ram@example.com"
+              >
+            </div>
+
+
+            <div class="form-group">
+              <label>Phone Number</label>
+
+              <input
+                type="text"
+                name="phone"
+                placeholder="e.g. +91 9876543210"
+              >
+            </div>
+
+
+            <div class="form-group">
+              <label>Location</label>
+
+              <input
+                type="text"
+                name="location"
+                placeholder="e.g. Kanpur, Uttar Pradesh"
+              >
+            </div>
+
+
+            <div class="form-group">
+              <label>LinkedIn</label>
+
+              <input
+                type="text"
+                name="linkedin"
+                placeholder="linkedin.com/in/username"
+              >
+            </div>
+
+
+            <div class="form-group">
+              <label>GitHub</label>
+
+              <input
+                type="text"
+                name="github"
+                placeholder="github.com/username"
+              >
+            </div>
+
+          </div>
+
+
+
+          <!-- =================================================
+               2. PROFESSIONAL SUMMARY
+               ================================================= -->
+
+          <div class="builder-section-block">
+
+            <h3>2. Professional Summary</h3>
+
+            <div class="form-group">
+
+              <label>Summary Statement</label>
+
+              <textarea
+                name="summary"
+                placeholder="Write a brief professional overview..."
+              ></textarea>
+
+            </div>
+
+          </div>
+
+
+
+          <!-- =================================================
+               3. WORK EXPERIENCE
+               ================================================= -->
+
+          <div class="builder-section-block">
+
+            <h3>3. Work Experience</h3>
+
+            <div id="experienceFields"></div>
+
+            <button
+              type="button"
+              class="secondary-btn"
+              id="addExpBtn"
+              style="width:100%;margin-top:10px;"
+            >
+              + Add Experience
+            </button>
+
+          </div>
+
+
+
+          <!-- =================================================
+               4. EDUCATION
+               ================================================= -->
+
+          <div class="builder-section-block">
+
+            <h3>4. Education</h3>
+
+            <div id="educationFields"></div>
+
+            <button
+              type="button"
+              class="secondary-btn"
+              id="addEduBtn"
+              style="width:100%;margin-top:10px;"
+            >
+              + Add Education
+            </button>
+
+          </div>
+
+
+
+          <!-- =================================================
+               5. SKILLS
+               ================================================= -->
+
+          <div class="builder-section-block">
+
+            <h3>5. Skills</h3>
+
+            <div class="form-group">
+
+              <label>Technical & Professional Skills</label>
+
+              <div class="skill-input-wrapper">
+
+                <input
+                  type="text"
+                  id="skillInput"
+                  placeholder="e.g. Java"
+                  autocomplete="off"
+                >
+
+                <button
+                  type="button"
+                  class="secondary-btn"
+                  id="addSkillBtn"
+                >
+                  + Add Skill
+                </button>
+
+              </div>
+
+
+              <!-- Added Skills -->
+
+              <div
+                id="skillsContainer"
+                class="skills-container"
+              ></div>
+
+
+              <small class="form-help">
+                Add skills individually. Example: Java, SQL, HTML, CSS, Git
+              </small>
+
+            </div>
+
+          </div>
+
+
+
+          <!-- =================================================
+               6. PROJECTS
+               ================================================= -->
+
+          <div class="builder-section-block">
+
+            <h3>6. Projects</h3>
+
+            <div id="projectFields"></div>
+
+            <button
+              type="button"
+              class="secondary-btn"
+              id="addProjectBtn"
+              style="width:100%;margin-top:10px;"
+            >
+              + Add Project
+            </button>
+
+          </div>
+
+
+
+          <!-- =================================================
+               7. CERTIFICATIONS
+               ================================================= -->
+
+          <div class="builder-section-block">
+
+            <h3>7. Certifications</h3>
+
+            <div id="certificationFields"></div>
+
+            <button
+              type="button"
+              class="secondary-btn"
+              id="addCertificationBtn"
+              style="width:100%;margin-top:10px;"
+            >
+              + Add Certification
+            </button>
+
+          </div>
+
+
+
+          <!-- =================================================
+               8. ACHIEVEMENTS
+               ================================================= -->
+
+          <div class="builder-section-block">
+
+            <h3>8. Achievements</h3>
+
+            <div class="form-group">
+
+              <label>Achievements / Extra Activities</label>
+
+              <textarea
+                name="achievements"
+                placeholder="Example:
+Solved 100+ LeetCode problems
+HackerRank 4-Star in C"
+              ></textarea>
+
+            </div>
+
+          </div>
+
+
+        </form>
+
+      </div>
+
+
+
+      <!-- =====================================================
+           RIGHT SIDE - LIVE PREVIEW
+           ===================================================== -->
+
+      <div class="builder-preview-wrapper">
+
+
+        <div class="preview-toolbar">
+
+          <span>Live Resume Preview</span>
+
+          <button
+            class="primary-btn"
+            id="printResumeBtn"
+            type="button"
+            style="padding:6px 16px;min-height:38px;"
+          >
+            Print / Save PDF
+          </button>
+
+        </div>
+
+
+
+        <!-- Printable Resume -->
+
+        <div
+          class="printable-resume-container"
+          id="printableResume"
+        >
+
+
+          <!-- HEADER -->
+
+          <div class="res-header-block">
+
+            <h1 id="previewName">
+              Your Name
+            </h1>
+
+
+            <p id="previewContact">
+              email@example.com | Phone | Location
+            </p>
+
+
+            <p
+              id="previewLinks"
+              class="preview-links"
+            ></p>
+
+          </div>
+
+
+
+          <!-- SUMMARY -->
+
+          <div class="res-body-block">
+
+            <h3>
+              Professional Summary
+            </h3>
+
+            <p
+              id="previewSummary"
+              class="res-text-content"
+            >
+              Your professional summary will appear here...
+            </p>
+
+          </div>
+
+
+
+          <!-- EXPERIENCE -->
+
+          <div
+            class="res-body-block"
+            id="previewExperienceSection"
+          >
+
+            <h3>
+              Experience
+            </h3>
+
+            <div id="previewExperienceList"></div>
+
+          </div>
+
+
+
+          <!-- EDUCATION -->
+
+          <div
+            class="res-body-block"
+            id="previewEducationSection"
+          >
+
+            <h3>
+              Education
+            </h3>
+
+            <div id="previewEducationList"></div>
+
+          </div>
+
+
+
+          <!-- SKILLS -->
+
+          <div
+            class="res-body-block"
+            id="previewSkillsSection"
+          >
+
+            <h3>
+              Skills
+            </h3>
+
+            <div
+              id="previewSkillsList"
+              class="preview-skill-list"
+            ></div>
+
+          </div>
+
+
+
+          <!-- PROJECTS -->
+
+          <div
+            class="res-body-block"
+            id="previewProjectsSection"
+          >
+
+            <h3>
+              Projects
+            </h3>
+
+            <div id="previewProjectsList"></div>
+
+          </div>
+
+
+
+          <!-- CERTIFICATIONS -->
+
+          <div
+            class="res-body-block"
+            id="previewCertificationsSection"
+          >
+
+            <h3>
+              Certifications
+            </h3>
+
+            <div id="previewCertificationsList"></div>
+
+          </div>
+
+
+
+          <!-- ACHIEVEMENTS -->
+
+          <div
+            class="res-body-block"
+            id="previewAchievementsSection"
+          >
+
+            <h3>
+              Achievements
+            </h3>
+
+            <div
+              id="previewAchievementsList"
+              class="res-text-content"
+            ></div>
+
+          </div>
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
 
   <!-- ================= STEP 2: ATS ANALYZER SECTION ================= -->
   <section class="section resume-section" id="resume-section">
     <div class="section-container">
       <div class="section-heading">
-        
         <h2>Job-Specific ATS Analyzer</h2>
         <p>Upload your resume or paste requirements to calculate exact role optimization scores.</p>
       </div>
@@ -246,7 +637,7 @@
             <div class="form-group">
               <label>Upload Resume File (PDF / DOCX)</label>
               <div class="file-upload">
-                <input type="file" id="resume" accept=".pdf,.doc,.docx">
+                <input type="file" id="resume" accept=".pdf,.docx">
                 <div class="file-upload-text">
                   <span>📁</span>
                   <strong>Click to upload</strong>
@@ -303,7 +694,7 @@
         <!-- Preview & Results Column -->
         <div>
           <!-- File Preview Box -->
-          <div class="preview-card" id="previewContainer">
+          <div class="preview-card" id="previewContainer" style="display:none;">
             <div class="preview-header">
               <div>
                 <span class="preview-label">DOCUMENT VIEWER</span>
@@ -466,70 +857,379 @@
   </section>
 
   <!-- ================= JOB SEARCH BOARD ================= -->
-  <section class="section alternate-section" id="jobSearchSection">
-    <div class="section-container">
-      <div class="section-heading">
-        <span>CURATED OPPORTUNITIES</span>
-        <h2>Explore Matched Openings</h2>
-        <p>Filter open roles matching your optimized technical profile.</p>
-      </div>
+<!-- ================= JOB SEARCH BOARD ================= -->
+<section class="section alternate-section" id="jobSearchSection">
 
-      <div class="job-tools">
-        <input type="text" id="jobSearch" placeholder="Search job title or keywords...">
-        <select id="jobLocation">
-          <option value="">All Locations</option>
-          <option value="Remote">Remote</option>
-          <option value="San Francisco">San Francisco, CA</option>
-          <option value="New York">New York, NY</option>
-        </select>
-      </div>
+  <div class="section-container">
 
-      <div class="table-wrapper">
-        <table id="jobsTable">
-          <thead>
-            <tr>
-              <th>Role Title</th>
-              <th>Company</th>
-              <th>Location</th>
-              <th>Match Tier</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Senior Frontend Developer</strong></td>
-              <td>TechCorp</td>
-              <td>Remote</td>
-              <td><span class="keyword-chip matched">95% Match</span></td>
-              <td><button class="job-btn" onclick="alert('Redirecting to application portal...')">Apply Now</button></td>
-            </tr>
-            <tr>
-              <td><strong>Full Stack Engineer</strong></td>
-              <td>Innovate Solutions</td>
-              <td>San Francisco, CA</td>
-              <td><span class="keyword-chip required">88% Match</span></td>
-              <td><button class="job-btn" onclick="alert('Redirecting to application portal...')">Apply Now</button></td>
-            </tr>
-            <tr>
-              <td><strong>React UI Specialist</strong></td>
-              <td>PixelCraft</td>
-              <td>New York, NY</td>
-              <td><span class="keyword-chip matched">92% Match</span></td>
-              <td><button class="job-btn" onclick="alert('Redirecting to application portal...')">Apply Now</button></td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="no-jobs" id="noJobs">No jobs found matching your criteria.</div>
-      </div>
+    <div class="section-heading">
+
+      <span>MAJOR PROJECT PREVIEW</span>
+
+      <h2>Smart Job Matching</h2>
+
+      <p>
+        A preview of the advanced job matching features planned
+        for the Major Project version of CareerPilot AI.
+      </p>
+
     </div>
-  </section>
+
+
+    <!-- ================= MAJOR PROJECT NOTICE ================= -->
+
+    <div class="major-project-notice">
+
+      <div class="major-project-icon">
+        ✦
+      </div>
+
+      <div class="major-project-text">
+
+        <div class="major-project-badge">
+          FUTURE SCOPE • MAJOR PROJECT
+        </div>
+
+        <h3>
+          From Resume Analysis to Career Opportunities
+        </h3>
+
+        <p>
+          The Major Project version will extend CareerPilot AI with
+          intelligent job matching, direct job application support,
+          application tracking and an AI-powered mock interview system.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <!-- ================= MINI PROJECT DEMO ================= -->
+
+    <div class="mini-demo-heading">
+
+      <span class="mini-demo-badge">
+        MINI PROJECT DEMO
+      </span>
+
+      <h3>
+        Explore Job Matching Preview
+      </h3>
+
+      <p>
+        Use the search and location filters to explore the demo.
+        Real job matching and application features will be added
+        in the Major Project.
+      </p>
+
+    </div>
+
+
+    <!-- ================= SEARCH TOOLS ================= -->
+
+    <div class="job-tools">
+
+      <input
+        type="text"
+        id="jobSearch"
+        placeholder="Search demo job title or keyword..."
+      >
+
+      <select id="jobLocation">
+
+        <option value="">
+          All Locations
+        </option>
+
+        <option value="Remote">
+          Remote
+        </option>
+
+        <option value="San Francisco">
+          San Francisco, CA
+        </option>
+
+        <option value="New York">
+          New York, NY
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <!-- ================= JOB TABLE ================= -->
+
+    <div class="table-wrapper">
+
+      <table id="jobsTable">
+
+        <thead>
+
+          <tr>
+
+            <th>Role Title</th>
+
+            <th>Company</th>
+
+            <th>Location</th>
+
+            <th>Demo Match</th>
+
+            <th>Action</th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+          <tr>
+
+            <td>
+              <strong>Frontend Developer</strong>
+            </td>
+
+            <td>
+              Demo Company
+            </td>
+
+            <td>
+              Remote
+            </td>
+
+            <td>
+              <span class="keyword-chip matched">
+                Demo Match
+              </span>
+            </td>
+
+            <td>
+
+              <button
+                type="button"
+                class="job-btn"
+                onclick="showJobDemo('Frontend Developer')"
+              >
+                View Demo
+              </button>
+
+            </td>
+
+          </tr>
+
+
+          <tr>
+
+            <td>
+              <strong>Full Stack Developer</strong>
+            </td>
+
+            <td>
+              Sample Tech
+            </td>
+
+            <td>
+              San Francisco, CA
+            </td>
+
+            <td>
+              <span class="keyword-chip required">
+                Demo Match
+              </span>
+            </td>
+
+            <td>
+
+              <button
+                type="button"
+                class="job-btn"
+                onclick="showJobDemo('Full Stack Developer')"
+              >
+                View Demo
+              </button>
+
+            </td>
+
+          </tr>
+
+
+          <tr>
+
+            <td>
+              <strong>React Developer</strong>
+            </td>
+
+            <td>
+              Demo Labs
+            </td>
+
+            <td>
+              New York, NY
+            </td>
+
+            <td>
+              <span class="keyword-chip matched">
+                Demo Match
+              </span>
+            </td>
+
+            <td>
+
+              <button
+                type="button"
+                class="job-btn"
+                onclick="showJobDemo('React Developer')"
+              >
+                View Demo
+              </button>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+
+      <div
+        class="no-jobs"
+        id="noJobs"
+      >
+        No demo jobs found matching your criteria.
+      </div>
+
+    </div>
+
+
+    <!-- ================= MAJOR PROJECT FEATURES ================= -->
+
+    <div class="major-features-heading">
+
+      <span>
+        PLANNED FOR MAJOR PROJECT
+      </span>
+
+      <h3>
+        What's Coming Next?
+      </h3>
+
+    </div>
+
+
+    <div class="major-features-grid">
+
+
+      <!-- JOB APPLICATION -->
+
+      <div class="major-feature-card">
+
+        <div class="major-feature-symbol">
+          ◈
+        </div>
+
+        <h4>
+          Smart Job Matching
+        </h4>
+
+        <p>
+          Match your resume, skills and experience with
+          relevant job requirements.
+        </p>
+
+        <span class="feature-status">
+          Major Project
+        </span>
+
+      </div>
+
+
+      <!-- JOB APPLY -->
+
+      <div class="major-feature-card">
+
+        <div class="major-feature-symbol">
+          ↗
+        </div>
+
+        <h4>
+          Job Application
+        </h4>
+
+        <p>
+          Find suitable opportunities and apply through
+          an integrated job application workflow.
+        </p>
+
+        <span class="feature-status">
+          Major Project
+        </span>
+
+      </div>
+
+
+      <!-- AI MOCK INTERVIEW -->
+
+      <div class="major-feature-card">
+
+        <div class="major-feature-symbol">
+          ◎
+        </div>
+
+        <h4>
+          AI Mock Interview
+        </h4>
+
+        <p>
+          Practice technical and HR interviews with
+          AI-generated questions and personalized feedback.
+        </p>
+
+        <span class="feature-status">
+          Major Project
+        </span>
+
+      </div>
+
+
+      <!-- APPLICATION TRACKING -->
+
+      <div class="major-feature-card">
+
+        <div class="major-feature-symbol">
+          ◷
+        </div>
+
+        <h4>
+          Application Tracking
+        </h4>
+
+        <p>
+          Track applied, shortlisted and other application
+          statuses from one place.
+        </p>
+
+        <span class="feature-status">
+          Major Project
+        </span>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
 
   <!-- ================= CONTACT / FEEDBACK ================= -->
   <section class="section contact-section" id="contact">
     <div class="section-container">
       <div class="contact-card">
-      <h2 style="color: #111827 !important;">Ready to Supercharge Your Career?</h2>
-<p style="color: #4b5563 !important;">Join thousands of professionals...</p>
+        <h2 style="color: #111827 !important;">Ready to Supercharge Your Career?</h2>
+        <p style="color: #4b5563 !important;">Join thousands of professionals...</p>
         <button class="primary-btn" id="feedbackBtn">Send Feedback</button>
       </div>
     </div>
@@ -557,11 +1257,12 @@
     </div>
   </footer>
 
-  <!-- Toast Notification -->
-  <div class="toast" id="toast">Notification message</div>
+  <!-- Scripts -->
+<script src="script.js"></script>
 
-  <script src="script.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js"></script>
+
+<script src="backend-integration.js"></script>
 </body>
 </html>
