@@ -12,8 +12,19 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@napi-rs/canvas": "^1.0.9",
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "mongoose": "^9.10.1"
+    "groq-sdk": "^1.6.0",
+    "jsonwebtoken": "^9.0.3",
+    "mammoth": "^1.13.0",
+    "mongoose": "^9.10.1",
+    "multer": "^2.4.0",
+    "pdf-parse": "^2.4.5",
+    "pdf-to-img": "^7.0.0",
+    "pdfjs-dist": "^5.4.296",
+    "tesseract.js": "^7.0.0"
   }
 }
